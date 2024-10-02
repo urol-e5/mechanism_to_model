@@ -21,6 +21,7 @@ annot_GO_terms_host <- read_csv("../data/annot_GO.terms.host.csv") %>% select(-1
 full_annot <- read_csv("../data/pver_annot_full.csv") %>% select(-1) %>% mutate(gene_id = str_remove(gene_id, "\\.t.*$"))
 
 DEGs <- read_csv("../data/DEGSeq2.sig.results.host.csv") %>% select(-1)
+DEGs_UP <- DEGs %>% filter(direction == "Upregulated")
 
 # Merge the data frames by 'gene_id'
 merged_data <- left_join(DEGs, annot_GO_terms_host, by = "gene_id") %>% filter(GO.ID != "unknown")
@@ -31,6 +32,9 @@ write_csv(merged_data, "../data/merged_DEG_GO_data.csv")
 merged_data_full <- left_join(DEGs, full_annot, by = "gene_id") 
 
 write_csv(merged_data_full, "../data/merged_DEG_full_annot.csv")
+
+# merge full annotation
+merged_data_full_UP <- left_join(DEGs_UP, full_annot, by = "gene_id") 
 ```
 
 ```{r}
@@ -55,10 +59,41 @@ write.csv(unique_SWISS_names_P, file = "../output/07-degs/unique_P_SWISS_terms.c
 
 
 ```{r}
-split_SWISS_names
+summary_P_SWISS <- as.data.frame(table(split_SWISS_names_P)) %>% arrange(desc(Freq))
+
+print(summary_P_SWISS)
+
+write.csv(summary_P_SWISS, file = "../output/07-degs/counted_P_SWISS_terms.csv", row.names = FALSE)
+```
+
+```{r}
+library(stringr)
+
+# Assuming your data is in a dataframe called df and the column is named 'your_column'
+count_P_UP <- sum(str_count(merged_data_full_UP$SWISS_GO.Names[!is.na(merged_data_full_UP$SWISS_GO.Names)], "P:")) 
+
+# Print the result
+count_P_UP
+
+split_SWISS_names <- unlist(str_split(merged_data_full_UP$SWISS_GO.Names, "; "))
+split_SWISS_names_P <- split_SWISS_names[str_detect(split_SWISS_names, "P:")] 
+split_SWISS_names_P <- split_SWISS_names_P[!is.na(split_SWISS_names_P)]
+
+unique_SWISS_names_P <- unique(split_SWISS_names_P)
+
+length(unique_SWISS_names_P)
+
+write.csv(unique_SWISS_names_P, file = "../output/07-degs/unique_P_SWISS_terms_Upregulated.csv", row.names = FALSE)
 ```
 
 
+```{r}
+summary_P_SWISS <- as.data.frame(table(split_SWISS_names_P)) %>% arrange(desc(Freq))
+
+print(summary_P_SWISS)
+
+write.csv(summary_P_SWISS, file = "../output/07-degs/counted_P_SWISS_terms_Upregulated.csv", row.names = FALSE)
+```
 
 
 
