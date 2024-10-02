@@ -1,0 +1,34 @@
+---
+title: "Correlation between epigenetic proteins and physiology"
+author: "Jill Ashey"
+date: "2024-10-02"
+output: html_document
+---
+
+Correlation between the epigenetic protein counts from the gene count matrix and the PC1 (calculated in 01-Physiology.Rmd). 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+Read in PC data 
+```{r}
+phys_pc <- read.csv("../data/01-Physiology/phys_data_pc.csv")
+```
+
+Read in gene count matrix 
+```{r}
+count_matrix <- read.csv("../data/RNAseq/Poc_gene_count_matrix.csv")
+```
+
+Read in blast results for Pverr against epigenetic proteins of interest 
+```{r}
+blast <- read.delim("../output/02-Pver-blast/Mach-blastp-Pver_out.tab", sep = "", header = F)
+```
+
+
+
+
+
