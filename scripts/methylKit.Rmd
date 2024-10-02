@@ -1,0 +1,84 @@
+---
+title: "DML using methylkit"
+author: "Zoe Dellaert"
+date: "10/02/2024"
+output: github_document
+---
+
+I am identifying differentially methylated loci using methylkit based on [Yaamini Venkataraman's code](https://osf.io/u46xj)
+
+# Prepare R Markdown file
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/Documents/URI/mechanism_to_model/output/methylKit/") #Set root directory
+```
+
+# Install packages
+
+```{r}
+#Packages for running methylKit
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("methylKit")
+require(methylKit)
+
+#install.packages("tidyverse")
+require(tidyverse)
+```
+
+```{r}
+#Packages for visualization
+
+#install.packages("vegan")
+#install.packages("gplots")
+#install.packages("dichromat")
+
+require(vegan)
+require(gplots)
+require(dichromat)
+```
+
+# Obtain session information
+
+```{r}
+sessionInfo()
+```
+
+```{r}
+
+```
+
+
+Moving Danielle files to unity from Andromeda:
+
+https://daniellembecker.github.io/DanielleBecker_Lab_Notebook/Data-Transfer-Andromeda-GlobusConnectPersonal-Pipeline/
+
+in Andromeda:
+
+```{bash}
+interactive
+module load GlobusConnectPersonal/3.2.0
+#follow the login link, enter auth code, enter "~/data/putnamlab/" as endpoint
+nano ~/.globusonline/lta/config-paths
+```
+
+```
+/data/putnamlab/,0,1 # Read-write access to the putnamlab directory
+```
+
+```{bash}
+globusconnectpersonal -start &
+```
+
+On Globus Connect in your browser (https://www.globus.org):
+- Login
+- Select your university and login
+- Go to the File Manager and in the Collection field on the left, enter the personal endpoint string that was spit out by the globus setup above 
+- Select acda5457-9c06-4564-8375-260ba428f22a (exact address of Unity) in the collection field on the right
+- Select the files or folders you want to transfer from Andromeda to Unity and press ‘Start’.
+  - navigating to `/data/putnamlab/dbecks/Becker_E5/WGBS_Becker_E5/Becker_WGBS/bismark_deduplicated/` in andromeda and `/project/pi_hputnam_uri_edu/WGBS_mech_model/` in unity
+  
+
