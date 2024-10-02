@@ -1,0 +1,39 @@
+---
+title: "Physiology"
+author: "Jill Ashey"
+date: "2024-10-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+Read in data 
+```{r}
+afdw <- read.csv("../data/Physiology/AFDW.csv")
+chlo_sym <- read.csv("../data/Physiology/chl_zoox_sheet.csv")
+photo <- read.csv("../data/Physiology/Pmax_data.csv") %>%
+  filter(rate.type == "Gross Photosynthesis") %>%
+  mutate(fragment.ID = str_replace(fragment.ID, "PV(\\d+)_L", "PV_\\1"))
+```
+
+Merge phys data (sym density, chlorophyll, tissue biomass, and Pmax) by sample id. 
+```{r}
+data <- afdw %>%
+  full_join(chlo_sym, by = "fragment.ID")
+data <- data %>%
+  full_join(photo, by = "fragment.ID")
+```
+
+Remove unneeded columns
+```{r}
+data <- data %>%
+  select(fragment.ID, treatment, surface.area, AFDW.mg.cm2., AFDW, chlA.ug.sample, chlA.ugcm2, chlA.pg.cell, zoox.cm2, zoox.per.cm2, E, Eh, lnc, Th, Topt, Pmax)
+```
+
+
+
+
