@@ -41,32 +41,36 @@ knitr::opts_chunk$set(
 ```
 
 
-Apul
+Pver
 
 # Protein
 
 ```{bash}
 cd ../data
 
-curl -O https://gannet.fish.washington.edu/seashell/snaps/GCF_013753865.1_Amil_v2.1.protein.faa
+curl -O http://pver.reefgenomics.org/download/Pver_proteins_names_v1.0.faa.gz
 ```
 
 
 
 ```{bash}
-head ../data/GCF_013753865.1_Amil_v2.1.protein.faa
+gunzip -c ../data/Pver_proteins_names_v1.0.faa.gz > ../data/Pver_proteins_names_v1.0.faa
 ```
 
 ```{bash}
-ls ../../data/blast_dbs
+head ../data/Pver_proteins_names_v1.0.faa
+```
+
+```{bash}
+ls ../data/blast_dbs
 ```
 
 
 ```{bash}
-cd ../../data/blast_dbs
+cd ../data/blast_dbs
 curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
 mv uniprot_sprot.fasta.gz uniprot_sprot_r2024_04.fasta.gz
-gunzip -k uniprot_sprot_r2024_04.fasta.gz
+gunzip -k uniprot_sprot_r2024_05.fasta.gz
 ```
 
 ```{bash}
@@ -83,13 +87,29 @@ grep -c ">" ../../data/blast_dbs/uniprot_sprot_r2024_04.fasta
 ```
 
 
+
+---
+
 ```{bash}
-fasta="../data/GCF_013753865.1_Amil_v2.1.protein.faa"
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in ../data/Pver_proteins_names_v1.0.faa \
+-dbtype prot \
+-out ../output/02-Pver-blast/Pver_proteins_names_v1.0
+```
+
+
+
+
+
+
+
+```{bash}
+fasta="../data/Machinery.fasta"
 
 /home/shared/ncbi-blast-2.15.0+/bin/blastp \
 -query $fasta \
--db ../../data/blast_dbs/uniprot_sprot_r2024_04 \
--out ../output/20-Apul-gene-annotation/blastp_out.tab \
+-db ../output/02-Pver-blast/Pver_proteins_names_v1.0 \
+-out ../output/02-Pver-blast/Mach-blastp-Pver_out.tab \
 -evalue 1E-05 \
 -num_threads 48 \
 -max_target_seqs 1 \
