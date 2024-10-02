@@ -11,22 +11,51 @@ Correlation between the epigenetic protein counts from the gene count matrix and
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(readxl)
 ```
 
-Read in PC data 
+Read in gene count matrix. 
 ```{r}
-phys_pc <- read.csv("../data/01-Physiology/phys_data_pc.csv")
-```
+count_matrix <- read.csv("../data/RNAseq/Poc_gene_count_matrix.csv") %>%
+  rename_with(~ str_remove(., "_.*"), -gene_id)
+head(count_matrix)
 
-Read in gene count matrix 
-```{r}
-count_matrix <- read.csv("../data/RNAseq/Poc_gene_count_matrix.csv")
+# Metadata for RNAseq
+rna_meta <- read.csv("../data/RNAseq/metadata.RNAseq.csv")
 ```
+The RNA and physiology samples do not have the same name, so the RNAseq metadata will be needed downstream. 
 
 Read in blast results for Pverr against epigenetic proteins of interest 
 ```{r}
 blast <- read.delim("../output/02-Pver-blast/Mach-blastp-Pver_out.tab", sep = "", header = F)
+colnames(blast) <- c("query_id", "subject_id", "percent_identity", "alignment_length", 
+                     "mismatches", "gap_openings", "q_start", "q_end", "s_start", 
+                     "s_end", "e_value", "bit_score")
+head(blast)
 ```
+
+The gene names in the count matrix and the blast dfs are not the same; this is due to naming errors made by the authors of the [Pverr genome paper](https://academic.oup.com/gbe/article/12/10/1911/5898631?login=false#supplementary-data). They made a supplementary file that has both naming iterations, so this will be used to make sure the gene names are the same in each df 
+
+Read in file with gene name iterations 
+```{r}
+names <- read_excel("../data/RNAseq/FileS2_Pver_gene_annot_May28.xlsx", skip = 4) %>%
+  select(Query, Gene)
+```
+
+Join names df with the blast df 
+```{r}
+blast_names <- blast %>%
+  full_join(names, by = c("subject_id" = "Query"))
+```
+
+Join blast_names df with count matrix 
+```{r}
+count_blast <- blast_names %>%
+  full_join(count_matrix, by = c("Gene" = "gene_id")) %>%
+  na.omit()
+```
+
+Zoe will make heatmap 
 
 
 
