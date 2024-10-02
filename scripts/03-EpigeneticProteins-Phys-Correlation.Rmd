@@ -40,9 +40,8 @@ The gene names in the count matrix and the blast dfs are not the same; this is d
 Read in file with gene name iterations 
 ```{r}
 names <- read_excel("../data/RNAseq/FileS2_Pver_gene_annot_May28.xlsx", skip = 4) %>%
-  select(Query, Gene) %>%
-  mutate(Gene = gsub("_gene", "", Gene))
-names$Gene <- gsub(names$Gene, "_gene", "")
+  select(Query, Gene)
+names$Gene <- gsub("_gene", "", names$Gene)
 ```
 
 Join names df with the blast df 
@@ -58,6 +57,7 @@ count_blast <- blast_names %>%
 str(count_blast)
 ```
 
+Manipulate data so that there is a sample column
 ```{r}
 reshaped_data <- count_blast %>%
   # Pivot longer to stack values
@@ -96,11 +96,13 @@ correlation_results <- count_phys %>%
     estimate = map_dbl(correlation, ~ .$estimate),
     p.value = map_dbl(correlation, ~ .$p.value)
   ) %>%
-  select(query_id, estimate, p.value)# %>%
-  #filter(p.value <= 0.05)
+  select(query_id, estimate, p.value) %>%
+  filter(p.value <= 0.05)
+
+head(correlation_results)
 ```
 
-
+Plot correlation heatmap with the x axis being epigenetic proteins. Only plotting the correlations that have pvalue <= 0.05. 
 ```{r}
 ggplot(correlation_results, aes(x = query_id, y = 1, fill = estimate)) +
   geom_tile(color = "white") +  # Create the tiles
@@ -110,8 +112,8 @@ ggplot(correlation_results, aes(x = query_id, y = 1, fill = estimate)) +
        x = "Query ID",
        y = "") +  # y-axis label empty for a single row
   theme_minimal() +  # Use a minimal theme
-  coord_flip() +
-  theme(axis.text.y = element_blank(),  # Hide y-axis text
+  coord_flip() +  # Flip the coordinates so that the Query IDs are on the y-axis
+  theme(axis.text.y = element_text(size = 8),  # Display and customize y-axis labels (Query IDs)
         axis.ticks.y = element_blank(),  # Hide y-axis ticks
         panel.grid.major = element_blank(),  # Remove major grid lines
         panel.grid.minor = element_blank(),  # Remove minor grid lines
