@@ -42,23 +42,21 @@ count_P <- sum(str_count(merged_data_full$SWISS_GO.Names[!is.na(merged_data_full
 # Print the result
 count_P
 
-merged_data_full %>% select(SWISS_GO.Names)
-
 split_SWISS_names <- unlist(str_split(merged_data_full$SWISS_GO.Names, "; "))
+split_SWISS_names_P <- split_SWISS_names[str_detect(split_SWISS_names, "P:")] 
+split_SWISS_names_P <- split_SWISS_names_P[!is.na(split_SWISS_names_P)]
 
-# Step 3: Find unique terms
-unique_SWISS_names <- unique(split_SWISS_names) 
-unique_SWISS_names <- unique_SWISS_names[!is.na(unique_SWISS_names)]
-
-unique_SWISS_names 
-
-unique_SWISS_names_P <- unique_SWISS_names[str_detect(unique_SWISS_names, "P:")] 
+unique_SWISS_names_P <- unique(split_SWISS_names_P)
 
 length(unique_SWISS_names_P)
 
 write.csv(unique_SWISS_names_P, file = "../output/07-degs/unique_P_SWISS_terms.csv", row.names = FALSE)
 ```
 
+
+```{r}
+split_SWISS_names
+```
 
 
 

@@ -1,0 +1,857 @@
+"split_SWISS_names_P","Freq"
+"P:cellular process",10
+"P:positive regulation of cellular process",10
+"P:cellular response to stimulus",8
+"P:signal transduction",8
+"P:cell differentiation",7
+"P:negative regulation of cellular process",7
+"P:regulation of cellular process",7
+"P:response to organic substance",7
+"P:animal organ development",6
+"P:cellular metabolic process",6
+"P:endocytosis",6
+"P:negative regulation of transcription by RNA polymerase II",6
+"P:response to chemical",6
+"P:ubiquitin-dependent protein catabolic process",6
+"P:anatomical structure morphogenesis",5
+"P:cell adhesion",5
+"P:heart development",5
+"P:negative regulation of gene expression",5
+"P:nervous system development",5
+"P:positive regulation of macromolecule metabolic process",5
+"P:response to abiotic stimulus",5
+"P:anatomical structure development",4
+"P:anatomical structure formation involved in morphogenesis",4
+"P:cell surface receptor signaling pathway",4
+"P:cellular component organization",4
+"P:circulatory system development",4
+"P:immune system process",4
+"P:positive regulation of gene expression",4
+"P:positive regulation of protein phosphorylation",4
+"P:positive regulation of transcription by RNA polymerase II",4
+"P:primary metabolic process",4
+"P:protein ubiquitination",4
+"P:regulation of biological quality",4
+"P:regulation of transcription by RNA polymerase II",4
+"P:response to hypoxia",4
+"P:response to stimulus",4
+"P:amyloid-beta clearance",3
+"P:behavioral response to nicotine",3
+"P:biological_process",3
+"P:brain development",3
+"P:cellular protein metabolic process",3
+"P:cholesterol transport",3
+"P:cilium assembly",3
+"P:defense response to bacterium",3
+"P:detection of stimulus",3
+"P:developmental process",3
+"P:embryonic limb morphogenesis",3
+"P:G protein-coupled receptor signaling pathway",3
+"P:glucose homeostasis",3
+"P:glutathione biosynthetic process",3
+"P:immune response",3
+"P:inorganic cation transmembrane transport",3
+"P:insulin receptor signaling pathway",3
+"P:localization",3
+"P:metal ion transport",3
+"P:multicellular organismal process",3
+"P:negative regulation of inflammatory response",3
+"P:negative regulation of interleukin-1 beta production",3
+"P:negative regulation of interleukin-6 production",3
+"P:negative regulation of NF-kappaB transcription factor activity",3
+"P:negative regulation of Notch signaling pathway",3
+"P:negative regulation of tumor necrosis factor production",3
+"P:nervous system process",3
+"P:neuron development",3
+"P:organic substance transport",3
+"P:positive regulation of biological process",3
+"P:positive regulation of cell population proliferation",3
+"P:positive regulation of cellular protein metabolic process",3
+"P:positive regulation of multicellular organismal process",3
+"P:positive regulation of transcription of nucleolar large rRNA by RNA polymerase I",3
+"P:regulation of cellular component organization",3
+"P:regulation of protein metabolic process",3
+"P:response to heat",3
+"P:response to stress",3
+"P:system development",3
+"P:T cell activation",3
+"P:telencephalon development",3
+"P:tissue development",3
+"P:transport",3
+"P:vesicle-mediated transport",3
+"P:aging",2
+"P:amino acid transport",2
+"P:anaphase-promoting complex-dependent catabolic process",2
+"P:angiogenesis",2
+"P:anion homeostasis",2
+"P:apoptotic process",2
+"P:associative learning",2
+"P:biological regulation",2
+"P:cell division",2
+"P:cell migration",2
+"P:cell-cell signaling",2
+"P:cellular biosynthetic process",2
+"P:cellular detoxification of cadmium ion",2
+"P:cellular ion homeostasis",2
+"P:cellular response to cGMP",2
+"P:cellular sulfide ion homeostasis",2
+"P:central nervous system development",2
+"P:chromatin organization",2
+"P:circadian rhythm",2
+"P:cytolysis",2
+"P:defense response to Gram-negative bacterium",2
+"P:dehydroascorbic acid transport",2
+"P:determination of heart left/right asymmetry",2
+"P:determination of liver left/right asymmetry",2
+"P:determination of pancreatic left/right asymmetry",2
+"P:embryonic digit morphogenesis",2
+"P:embryonic heart tube morphogenesis",2
+"P:embryonic morphogenesis",2
+"P:establishment or maintenance of cell polarity",2
+"P:fatty acid biosynthetic process",2
+"P:flagellated sperm motility",2
+"P:floor plate development",2
+"P:fructose transmembrane transport",2
+"P:glucose transmembrane transport",2
+"P:heart looping",2
+"P:heart morphogenesis",2
+"P:hemolysis in other organism",2
+"P:hippocampus development",2
+"P:hormone transport",2
+"P:hydrogen sulfide metabolic process",2
+"P:inner ear morphogenesis",2
+"P:kidney development",2
+"P:leukotriene biosynthetic process",2
+"P:lipid metabolic process",2
+"P:lipoprotein transport",2
+"P:locomotory behavior",2
+"P:lung development",2
+"P:macromolecule metabolic process",2
+"P:male meiosis I",2
+"P:memory",2
+"P:metal ion homeostasis",2
+"P:modulation of process of other organism",2
+"P:morphogenesis of an epithelium",2
+"P:multicellular organism development",2
+"P:negative regulation of cell population proliferation",2
+"P:negative regulation of cytokine production involved in inflammatory response",2
+"P:negative regulation of epithelial cell proliferation",2
+"P:negative regulation of fibroblast proliferation",2
+"P:negative regulation of I-kappaB kinase/NF-kappaB signaling",2
+"P:negative regulation of innate immune response",2
+"P:negative regulation of interferon-alpha production",2
+"P:negative regulation of interferon-beta production",2
+"P:negative regulation of interleukin-12 production",2
+"P:negative regulation of NIK/NF-kappaB signaling",2
+"P:negative regulation of NLRP3 inflammasome complex assembly",2
+"P:negative regulation of phosphatidylinositol 3-kinase signaling",2
+"P:negative regulation of protein phosphorylation",2
+"P:negative regulation of response to stimulus",2
+"P:negative regulation of Rho protein signal transduction",2
+"P:negative regulation of synaptic assembly at neuromuscular junction",2
+"P:nephron tubule development",2
+"P:neural crest cell development",2
+"P:neurogenesis",2
+"P:nitrogen compound metabolic process",2
+"P:nitrogen compound transport",2
+"P:Notch signaling pathway",2
+"P:organic substance biosynthetic process",2
+"P:organic substance metabolic process",2
+"P:phagocytosis, engulfment",2
+"P:phosphatidic acid biosynthetic process",2
+"P:plasma lipoprotein particle clearance",2
+"P:positive regulation of apoptotic process",2
+"P:positive regulation of cell migration",2
+"P:positive regulation of cholesterol storage",2
+"P:positive regulation of cysteine-type endopeptidase activity involved in apoptotic process",2
+"P:positive regulation of DNA-binding transcription factor activity",2
+"P:positive regulation of ERK1 and ERK2 cascade",2
+"P:positive regulation of intracellular signal transduction",2
+"P:positive regulation of macrophage derived foam cell differentiation",2
+"P:positive regulation of MAP kinase activity",2
+"P:positive regulation of molecular function",2
+"P:positive regulation of osteoblast differentiation",2
+"P:positive regulation of protein kinase B signaling",2
+"P:positive regulation of protein-containing complex assembly",2
+"P:positive regulation of response to stimulus",2
+"P:positive regulation of synaptic transmission",2
+"P:positive regulation of transcription, DNA-templated",2
+"P:potassium ion transmembrane transport",2
+"P:pronephros development",2
+"P:protein heterooligomerization",2
+"P:protein homotrimerization",2
+"P:protein tetramerization",2
+"P:proximal/distal pattern formation",2
+"P:receptor-mediated endocytosis",2
+"P:regulation of biological process",2
+"P:regulation of cell communication",2
+"P:regulation of cell shape",2
+"P:regulation of circadian rhythm",2
+"P:regulation of dendrite development",2
+"P:regulation of dendrite morphogenesis",2
+"P:regulation of developmental process",2
+"P:regulation of inflammatory response",2
+"P:regulation of localization",2
+"P:regulation of neurogenesis",2
+"P:regulation of neurotransmitter levels",2
+"P:regulation of protein ubiquitination",2
+"P:regulation of signal transduction",2
+"P:regulation of signaling",2
+"P:regulation of synaptic vesicle exocytosis",2
+"P:regulation of Wnt signaling pathway",2
+"P:renal system process",2
+"P:response to activity",2
+"P:response to cold",2
+"P:response to ethanol",2
+"P:response to food",2
+"P:response to glucocorticoid",2
+"P:response to hormone",2
+"P:response to light stimulus",2
+"P:response to lipopolysaccharide",2
+"P:rRNA processing",2
+"P:sensory perception of sound",2
+"P:sensory perception of taste",2
+"P:sexual reproduction",2
+"P:small GTPase mediated signal transduction",2
+"P:small molecule metabolic process",2
+"P:sulfide oxidation, using sulfide:quinone oxidoreductase",2
+"P:synaptic transmission involved in micturition",2
+"P:system process",2
+"P:toll-like receptor signaling pathway",2
+"P:tube development",2
+"P:tube morphogenesis",2
+"P:zymogen activation",2
+"P:4-hydroxyproline catabolic process",1
+"P:abscisic acid transport",1
+"P:abscisic acid-activated signaling pathway",1
+"P:acetylcholine receptor signaling pathway",1
+"P:actin cytoskeleton organization",1
+"P:action potential",1
+"P:activation of phospholipase D activity",1
+"P:activation of protein kinase B activity",1
+"P:activation of transmembrane receptor protein tyrosine kinase activity",1
+"P:adenylate cyclase-activating G protein-coupled receptor signaling pathway",1
+"P:adrenal gland development",1
+"P:adult behavior",1
+"P:adult heart development",1
+"P:aggregation involved in sorocarp development",1
+"P:aggressive behavior",1
+"P:alternative mRNA splicing, via spliceosome",1
+"P:amino acid transmembrane transport",1
+"P:animal organ morphogenesis",1
+"P:anterior/posterior pattern specification",1
+"P:anterograde neuronal dense core vesicle transport",1
+"P:anterograde synaptic vesicle transport",1
+"P:antigen transcytosis by M cells in mucosal-associated lymphoid tissue",1
+"P:antimicrobial humoral response",1
+"P:apical junction assembly",1
+"P:apoptotic mitochondrial changes",1
+"P:aromatic amino acid family metabolic process",1
+"P:artery morphogenesis",1
+"P:asexual reproduction",1
+"P:astrocyte development",1
+"P:ATP metabolic process",1
+"P:auditory receptor cell stereocilium organization",1
+"P:autophagosome assembly",1
+"P:autophagy",1
+"P:B cell activation",1
+"P:behavior",1
+"P:behavioral response to ethanol",1
+"P:bicarbonate transport",1
+"P:biosynthetic process",1
+"P:blastoderm segmentation",1
+"P:blood vessel development",1
+"P:bone marrow development",1
+"P:bone mineralization",1
+"P:bone trabecula formation",1
+"P:branching involved in blood vessel morphogenesis",1
+"P:calcium ion transmembrane transport",1
+"P:calcium ion transport",1
+"P:canonical Wnt signaling pathway",1
+"P:carbohydrate phosphorylation",1
+"P:cardiac chamber morphogenesis",1
+"P:cardiac muscle contraction",1
+"P:cardiac muscle hypertrophy in response to stress",1
+"P:cardiac septum development",1
+"P:cardiocyte differentiation",1
+"P:cardiolipin acyl-chain remodeling",1
+"P:cell communication",1
+"P:cell cycle",1
+"P:cell development",1
+"P:cell fate commitment",1
+"P:cell projection organization",1
+"P:cellular aldehyde metabolic process",1
+"P:cellular component assembly",1
+"P:cellular component morphogenesis",1
+"P:cellular defense response",1
+"P:cellular localization",1
+"P:cellular macromolecule catabolic process",1
+"P:cellular protein modification process",1
+"P:cellular protein-containing complex assembly",1
+"P:cellular response to aldosterone",1
+"P:cellular response to bacterial lipopeptide",1
+"P:cellular response to cAMP",1
+"P:cellular response to chemical stress",1
+"P:cellular response to DNA damage stimulus",1
+"P:cellular response to epidermal growth factor stimulus",1
+"P:cellular response to gonadotropin-releasing hormone",1
+"P:cellular response to growth factor stimulus",1
+"P:cellular response to insulin stimulus",1
+"P:cellular response to leucine starvation",1
+"P:cellular response to leukemia inhibitory factor",1
+"P:cellular response to nerve growth factor stimulus",1
+"P:cellular response to oxygen-containing compound",1
+"P:cellular response to platelet-derived growth factor stimulus",1
+"P:cellular response to starvation",1
+"P:cellular response to stress",1
+"P:cellular response to transforming growth factor beta stimulus",1
+"P:cellular response to type I interferon",1
+"P:cellular response to UV",1
+"P:cerebellar cortex development",1
+"P:cerebellar molecular layer formation",1
+"P:cerebellar Purkinje cell layer structural organization",1
+"P:cerebellum development",1
+"P:cerebral cortex GABAergic interneuron fate commitment",1
+"P:chemotaxis",1
+"P:chemotaxis to folate",1
+"P:chondrocyte intercalation involved in growth plate cartilage morphogenesis",1
+"P:circadian regulation of gene expression",1
+"P:citrulline biosynthetic process",1
+"P:clathrin-dependent endocytosis",1
+"P:cochlea morphogenesis",1
+"P:collagen fibril organization",1
+"P:compartment pattern specification",1
+"P:complement activation, classical pathway",1
+"P:cortical cytoskeleton organization",1
+"P:cotyledon vascular tissue pattern formation",1
+"P:craniofacial suture morphogenesis",1
+"P:cytokinin transport",1
+"P:cytokinin-activated signaling pathway",1
+"P:cytoskeleton organization",1
+"P:defense response to Gram-positive bacterium",1
+"P:dendrite arborization",1
+"P:dendritic spine maintenance",1
+"P:dendritic spine organization",1
+"P:dephosphorylation",1
+"P:detection of abiotic stimulus",1
+"P:detection of biotic stimulus",1
+"P:detection of external stimulus",1
+"P:detection of stimulus involved in sensory perception of pain",1
+"P:determination of digestive tract left/right asymmetry",1
+"P:determination of left/right asymmetry in lateral mesoderm",1
+"P:determination of left/right symmetry",1
+"P:developmental growth",1
+"P:developmental process involved in reproduction",1
+"P:diencephalon development",1
+"P:digestive tract development",1
+"P:digestive tract morphogenesis",1
+"P:DNA damage induced protein phosphorylation",1
+"P:DNA repair",1
+"P:DNA-dependent DNA replication",1
+"P:dorsal appendage formation",1
+"P:dorsal/ventral neural tube patterning",1
+"P:embryo development ending in birth or egg hatching",1
+"P:embryonic liver development",1
+"P:embryonic skeletal system development",1
+"P:endoplasmic reticulum to Golgi vesicle-mediated transport",1
+"P:endothelial cell development",1
+"P:endothelial tip cell fate specification",1
+"P:energy homeostasis",1
+"P:entrainment of circadian clock by photoperiod",1
+"P:epidermis development",1
+"P:epidermis morphogenesis",1
+"P:epithelial cell differentiation",1
+"P:epithelial cilium movement involved in determination of left/right asymmetry",1
+"P:establishment of planar polarity involved in neural tube closure",1
+"P:estrogen metabolic process",1
+"P:excitatory postsynaptic potential",1
+"P:exocrine pancreas development",1
+"P:exocytosis",1
+"P:export across plasma membrane",1
+"P:extracellular matrix disassembly",1
+"P:extracellular matrix organization",1
+"P:fat cell differentiation",1
+"P:fatty acid beta-oxidation using acyl-CoA dehydrogenase",1
+"P:fatty acid derivative biosynthetic process",1
+"P:filopodium assembly",1
+"P:forebrain neuron differentiation",1
+"P:fructose 6-phosphate metabolic process",1
+"P:GABAergic neuron differentiation in basal ganglia",1
+"P:generation of neurons",1
+"P:generation of ovulation cycle rhythm",1
+"P:glial cell development",1
+"P:glomus development",1
+"P:glucose 6-phosphate metabolic process",1
+"P:glucose catabolic process",1
+"P:glucose metabolic process",1
+"P:glucosinolate biosynthetic process",1
+"P:glutamate metabolic process",1
+"P:glutathione catabolic process",1
+"P:glutathione metabolic process",1
+"P:Golgi vesicle transport",1
+"P:gonad development",1
+"P:green leaf volatile biosynthetic process",1
+"P:GTP metabolic process",1
+"P:hair follicle development",1
+"P:head development",1
+"P:heart jogging",1
+"P:heart valve development",1
+"P:heart valve morphogenesis",1
+"P:hemangioblast cell differentiation",1
+"P:hematopoietic progenitor cell differentiation",1
+"P:heterochromatin organization",1
+"P:hindbrain development",1
+"P:histone H2A acetylation",1
+"P:histone H3-K14 acetylation",1
+"P:histone H4-K12 acetylation",1
+"P:histone H4-K5 acetylation",1
+"P:histone H4-K8 acetylation",1
+"P:histone methylation",1
+"P:histone ubiquitination",1
+"P:hormone metabolic process",1
+"P:hypochord development",1
+"P:in utero embryonic development",1
+"P:induced systemic resistance",1
+"P:inflammatory response",1
+"P:innate immune response",1
+"P:inner cell mass cell proliferation",1
+"P:inner dynein arm assembly",1
+"P:inner ear development",1
+"P:inner ear receptor cell stereocilium organization",1
+"P:integrin-mediated signaling pathway",1
+"P:intercellular transport",1
+"P:interkinetic nuclear migration",1
+"P:intra-Golgi vesicle-mediated transport",1
+"P:intracellular signal transduction",1
+"P:intracellular transport",1
+"P:intrinsic apoptotic signaling pathway in response to endoplasmic reticulum stress",1
+"P:ion transmembrane transport",1
+"P:ion transport",1
+"P:L-phenylalanine catabolic process",1
+"P:lactation",1
+"P:larval locomotory behavior",1
+"P:lateral inhibition",1
+"P:left/right axis specification",1
+"P:leucine catabolic process",1
+"P:leukocyte chemotaxis",1
+"P:leukocyte migration involved in inflammatory response",1
+"P:lipid homeostasis",1
+"P:lipid hydroxylation",1
+"P:liver regeneration",1
+"P:long-chain fatty acid metabolic process",1
+"P:loop of Henle development",1
+"P:lymphocyte activation",1
+"P:male gonad development",1
+"P:male sex determination",1
+"P:MAPK cascade",1
+"P:marginal zone B cell differentiation",1
+"P:maturation of SSU-rRNA",1
+"P:mature ribosome assembly",1
+"P:membrane depolarization",1
+"P:membrane depolarization during cardiac muscle cell action potential",1
+"P:membrane fusion",1
+"P:mesodermal cell migration",1
+"P:metabolic process",1
+"P:methionine catabolic process",1
+"P:methionyl-tRNA aminoacylation",1
+"P:midbrain development",1
+"P:mitotic cytokinesis",1
+"P:mitotic sister chromatid cohesion",1
+"P:mitotic spindle assembly",1
+"P:mitotic spindle organization",1
+"P:modulation of chemical synaptic transmission",1
+"P:modulation of excitatory postsynaptic potential",1
+"P:molting cycle, collagen and cuticulin-based cuticle",1
+"P:motile cilium assembly",1
+"P:movement of cell or subcellular component",1
+"P:multicellular organism aging",1
+"P:multicellular organism growth",1
+"P:multicellular organismal reproductive process",1
+"P:muscle filament sliding",1
+"P:muscle structure development",1
+"P:myelination",1
+"P:myofibril assembly",1
+"P:N-acylethanolamine metabolic process",1
+"P:N-acylphosphatidylethanolamine metabolic process",1
+"P:negative regulation of angiogenesis",1
+"P:negative regulation of biological process",1
+"P:negative regulation of BMP signaling pathway",1
+"P:negative regulation of cardiac muscle cell differentiation",1
+"P:negative regulation of cell division",1
+"P:negative regulation of cellular metabolic process",1
+"P:negative regulation of cellular response to transforming growth factor beta stimulus",1
+"P:negative regulation of chaperone-mediated protein folding",1
+"P:negative regulation of circadian rhythm",1
+"P:negative regulation of cytokine production",1
+"P:negative regulation of developmental process",1
+"P:negative regulation of extrinsic apoptotic signaling pathway via death domain receptors",1
+"P:negative regulation of feeding behavior",1
+"P:negative regulation of G protein-coupled receptor signaling pathway",1
+"P:negative regulation of glial cell apoptotic process",1
+"P:negative regulation of glial cell proliferation",1
+"P:negative regulation of glucocorticoid receptor signaling pathway",1
+"P:negative regulation of glucocorticoid secretion",1
+"P:negative regulation of gluconeogenesis",1
+"P:negative regulation of glycogen biosynthetic process",1
+"P:negative regulation of hydrogen peroxide-mediated programmed cell death",1
+"P:negative regulation of inner ear auditory receptor cell differentiation",1
+"P:negative regulation of insulin receptor signaling pathway",1
+"P:negative regulation of interleukin-10 production",1
+"P:negative regulation of multicellular organismal process",1
+"P:negative regulation of myeloid cell differentiation",1
+"P:negative regulation of myoblast differentiation",1
+"P:negative regulation of neuron apoptotic process",1
+"P:negative regulation of neuron projection development",1
+"P:negative regulation of oligodendrocyte differentiation",1
+"P:negative regulation of osteoclast development",1
+"P:negative regulation of osteoclast differentiation",1
+"P:negative regulation of photoreceptor cell differentiation",1
+"P:negative regulation of post-embryonic development",1
+"P:negative regulation of protein import into nucleus",1
+"P:negative regulation of protein metabolic process",1
+"P:negative regulation of protein processing",1
+"P:negative regulation of proteolysis",1
+"P:negative regulation of reactive oxygen species metabolic process",1
+"P:negative regulation of regulated secretory pathway",1
+"P:negative regulation of RNA metabolic process",1
+"P:negative regulation of RNA polymerase II regulatory region sequence-specific DNA binding",1
+"P:negative regulation of sequestering of triglyceride",1
+"P:negative regulation of signal transduction",1
+"P:negative regulation of smooth muscle cell differentiation",1
+"P:negative regulation of smoothened signaling pathway",1
+"P:negative regulation of transcription from RNA polymerase II promoter involved in smooth muscle cell differentiation",1
+"P:negative regulation of transcription regulatory region DNA binding",1
+"P:negative regulation of translation",1
+"P:negative regulation of transporter activity",1
+"P:negative regulation of vascular associated smooth muscle cell migration",1
+"P:negative regulation of vascular associated smooth muscle cell proliferation",1
+"P:negative regulation of Wnt signaling pathway",1
+"P:negative regulation of wound healing",1
+"P:nematode larval development",1
+"P:neural nucleus development",1
+"P:neural tube closure",1
+"P:neuromuscular synaptic transmission",1
+"P:neuron apoptotic process",1
+"P:neuron differentiation",1
+"P:neuron fate determination",1
+"P:neuron fate specification",1
+"P:neuron projection maintenance",1
+"P:neuronal stem cell population maintenance",1
+"P:neuropeptide signaling pathway",1
+"P:neurotransmitter receptor localization to postsynaptic specialization membrane",1
+"P:neutral amino acid transport",1
+"P:Notch signaling pathway involved in arterial endothelial cell fate commitment",1
+"P:notochord cell differentiation",1
+"P:nucleic acid phosphodiester bond hydrolysis",1
+"P:odontogenesis of dentin-containing tooth",1
+"P:one-carbon metabolic process",1
+"P:oocyte dorsal/ventral axis specification",1
+"P:oogenesis",1
+"P:organ growth",1
+"P:organelle organization",1
+"P:organonitrogen compound metabolic process",1
+"P:ornithine biosynthetic process",1
+"P:ossification involved in bone remodeling",1
+"P:ovulation cycle",1
+"P:pattern specification process",1
+"P:peptide catabolic process",1
+"P:peptidyl-amino acid modification",1
+"P:peptidyl-arginine N-methylation",1
+"P:peptidyl-lysine modification to peptidyl-hypusine",1
+"P:peptidyl-lysine oxidation",1
+"P:peptidyl-proline hydroxylation to 4-hydroxy-L-proline",1
+"P:peptidyl-tyrosine autophosphorylation",1
+"P:peroxisome organization",1
+"P:phagocytosis",1
+"P:phloem or xylem histogenesis",1
+"P:phosphatidylethanolamine acyl-chain remodeling",1
+"P:phosphatidylethanolamine biosynthetic process",1
+"P:phosphatidylinositol metabolic process",1
+"P:phospholipid transport",1
+"P:phototaxis",1
+"P:plasma membrane bounded cell projection organization",1
+"P:platelet activation",1
+"P:polyphosphate-mediated signaling",1
+"P:pore formation in membrane of other organism",1
+"P:positive regulation of amacrine cell differentiation",1
+"P:positive regulation of amyloid-beta formation",1
+"P:positive regulation of bone mineralization",1
+"P:positive regulation of cell death",1
+"P:positive regulation of cGMP-mediated signaling",1
+"P:positive regulation of chemorepellent activity",1
+"P:positive regulation of CoA-transferase activity",1
+"P:positive regulation of cytokine production",1
+"P:positive regulation of cytosolic calcium ion concentration",1
+"P:positive regulation of developmental growth",1
+"P:positive regulation of endocytosis",1
+"P:positive regulation of epidermal growth factor-activated receptor activity",1
+"P:positive regulation of epithelial cell proliferation",1
+"P:positive regulation of excitatory postsynaptic potential",1
+"P:positive regulation of filopodium assembly",1
+"P:positive regulation of glucose import",1
+"P:positive regulation of glycogen biosynthetic process",1
+"P:positive regulation of glycolytic process",1
+"P:positive regulation of glycoprotein biosynthetic process",1
+"P:positive regulation of heart rate involved in baroreceptor response to decreased systemic arterial blood pressure",1
+"P:positive regulation of insulin secretion",1
+"P:positive regulation of JUN kinase activity",1
+"P:positive regulation of lipase activity",1
+"P:positive regulation of long-term synaptic potentiation",1
+"P:positive regulation of MAPK cascade",1
+"P:positive regulation of megakaryocyte differentiation",1
+"P:positive regulation of meiotic cell cycle",1
+"P:positive regulation of meiotic cell cycle process involved in oocyte maturation",1
+"P:positive regulation of mitotic metaphase/anaphase transition",1
+"P:positive regulation of mitotic nuclear division",1
+"P:positive regulation of nitric oxide biosynthetic process",1
+"P:positive regulation of Notch signaling pathway",1
+"P:positive regulation of nucleobase-containing compound metabolic process",1
+"P:positive regulation of oligodendrocyte differentiation",1
+"P:positive regulation of osteoblast proliferation",1
+"P:positive regulation of oxidative stress-induced neuron intrinsic apoptotic signaling pathway",1
+"P:positive regulation of peptidyl-serine phosphorylation",1
+"P:positive regulation of phosphorylation",1
+"P:positive regulation of positive chemotaxis to cAMP",1
+"P:positive regulation of proteasomal protein catabolic process",1
+"P:positive regulation of protein binding",1
+"P:positive regulation of protein catabolic process",1
+"P:positive regulation of protein insertion into mitochondrial outer membrane",1
+"P:positive regulation of protein localization to nucleolus",1
+"P:positive regulation of protein metabolic process",1
+"P:positive regulation of protein oxidation",1
+"P:positive regulation of protein polyubiquitination",1
+"P:positive regulation of protein targeting to mitochondrion",1
+"P:positive regulation of protein ubiquitination",1
+"P:positive regulation of protein-containing complex disassembly",1
+"P:positive regulation of receptor internalization",1
+"P:positive regulation of release of cytochrome c from mitochondria",1
+"P:positive regulation of respiratory burst",1
+"P:positive regulation of RNA biosynthetic process",1
+"P:positive regulation of RNA metabolic process",1
+"P:positive regulation of signal transduction",1
+"P:positive regulation of skeletal muscle tissue growth",1
+"P:positive regulation of sprouting angiogenesis",1
+"P:positive regulation of stress fiber assembly",1
+"P:positive regulation of synapse maturation",1
+"P:positive regulation of synaptic plasticity",1
+"P:positive regulation of T cell proliferation",1
+"P:positive regulation of TORC2 signaling",1
+"P:positive regulation of transcription from RNA polymerase II promoter in response to stress",1
+"P:positive regulation of translation",1
+"P:positive regulation of triglyceride catabolic process",1
+"P:positive regulation of ubiquitin protein ligase activity",1
+"P:positive regulation of ubiquitin-dependent protein catabolic process",1
+"P:positive regulation of ubiquitin-protein transferase activity",1
+"P:post-embryonic development",1
+"P:post-transcriptional gene silencing by RNA",1
+"P:posterior lateral line development",1
+"P:potassium ion import across plasma membrane",1
+"P:production of miRNAs involved in gene silencing by miRNA",1
+"P:production of siRNA involved in RNA interference",1
+"P:programmed cell death",1
+"P:proline biosynthetic process",1
+"P:proline catabolic process",1
+"P:proteasome-mediated ubiquitin-dependent protein catabolic process",1
+"P:protein adenylylation",1
+"P:protein catabolic process",1
+"P:protein dephosphorylation",1
+"P:protein destabilization",1
+"P:protein folding",1
+"P:protein hexamerization",1
+"P:protein homotetramerization",1
+"P:protein K11-linked ubiquitination",1
+"P:protein localization",1
+"P:protein localization to cilium",1
+"P:protein localization to endosome",1
+"P:protein localization to mitochondrion",1
+"P:protein metabolic process",1
+"P:protein mono-ADP-ribosylation",1
+"P:protein N-linked glycosylation",1
+"P:protein phosphorylation",1
+"P:protein poly-ADP-ribosylation",1
+"P:protein processing",1
+"P:protein repair",1
+"P:protein secretion",1
+"P:protein stabilization",1
+"P:protein transport",1
+"P:protein transport along microtubule",1
+"P:protein-containing complex assembly",1
+"P:proteolysis",1
+"P:proximal tubule development",1
+"P:proximal/distal pattern formation involved in pronephric nephron development",1
+"P:Ras protein signal transduction",1
+"P:regionalization",1
+"P:regulation of acetylcholine secretion, neurotransmission",1
+"P:regulation of adenylate cyclase-activating G protein-coupled receptor signaling pathway",1
+"P:regulation of amyloid fibril formation",1
+"P:regulation of amyloid-beta formation",1
+"P:regulation of anatomical structure morphogenesis",1
+"P:regulation of anion transport",1
+"P:regulation of apoptotic process",1
+"P:regulation of autophagy of mitochondrion",1
+"P:regulation of blood pressure",1
+"P:regulation of cell adhesion",1
+"P:regulation of cell differentiation",1
+"P:regulation of cell division",1
+"P:regulation of cell growth",1
+"P:regulation of cell migration involved in sprouting angiogenesis",1
+"P:regulation of cellular biosynthetic process",1
+"P:regulation of cellular metabolic process",1
+"P:regulation of cellular response to stress",1
+"P:regulation of cilium beat frequency",1
+"P:regulation of defense response to virus",1
+"P:regulation of dendritic spine development",1
+"P:regulation of dendritic spine morphogenesis",1
+"P:regulation of development, heterochronic",1
+"P:regulation of DNA damage checkpoint",1
+"P:regulation of DNA endoreduplication",1
+"P:regulation of DNA-binding transcription factor activity",1
+"P:regulation of dopamine secretion",1
+"P:regulation of embryonic development",1
+"P:regulation of ERK1 and ERK2 cascade",1
+"P:regulation of female gonad development",1
+"P:regulation of fibroblast migration",1
+"P:regulation of focal adhesion assembly",1
+"P:regulation of gene expression, epigenetic",1
+"P:regulation of glial cell differentiation",1
+"P:regulation of gluconeogenesis",1
+"P:regulation of heart rate",1
+"P:regulation of hematopoietic stem cell differentiation",1
+"P:regulation of hormone levels",1
+"P:regulation of hydrogen peroxide metabolic process",1
+"P:regulation of I-kappaB kinase/NF-kappaB signaling",1
+"P:regulation of interferon-beta production",1
+"P:regulation of intracellular signal transduction",1
+"P:regulation of ion transport",1
+"P:regulation of locomotion",1
+"P:regulation of MAPK cascade",1
+"P:regulation of mast cell activation",1
+"P:regulation of meiotic nuclear division",1
+"P:regulation of melanin biosynthetic process",1
+"P:regulation of miRNA metabolic process",1
+"P:regulation of molecular function",1
+"P:regulation of myelination",1
+"P:regulation of myosin-light-chain-phosphatase activity",1
+"P:regulation of neuron apoptotic process",1
+"P:regulation of neuron death",1
+"P:regulation of norepinephrine secretion",1
+"P:regulation of nucleobase-containing compound metabolic process",1
+"P:regulation of pH",1
+"P:regulation of postsynaptic neurotransmitter receptor activity",1
+"P:regulation of proteasomal ubiquitin-dependent protein catabolic process",1
+"P:regulation of proteolysis",1
+"P:regulation of release of sequestered calcium ion into cytosol by sarcoplasmic reticulum",1
+"P:regulation of response to external stimulus",1
+"P:regulation of response to stimulus",1
+"P:regulation of response to stress",1
+"P:regulation of secretion",1
+"P:regulation of secretion by cell",1
+"P:regulation of sequestering of calcium ion",1
+"P:regulation of slow-twitch skeletal muscle fiber contraction",1
+"P:regulation of small GTPase mediated signal transduction",1
+"P:regulation of smooth muscle contraction",1
+"P:regulation of smoothened signaling pathway",1
+"P:regulation of somitogenesis",1
+"P:regulation of synapse assembly",1
+"P:regulation of synaptic transmission, dopaminergic",1
+"P:regulation of system process",1
+"P:regulation of the force of heart contraction",1
+"P:regulation of the force of skeletal muscle contraction",1
+"P:regulation of TOR signaling",1
+"P:regulation of transcription, DNA-templated",1
+"P:regulation of translation",1
+"P:regulation of transport",1
+"P:regulation of vascular endothelial growth factor signaling pathway",1
+"P:response to acetylcholine",1
+"P:response to amyloid-beta",1
+"P:response to auditory stimulus",1
+"P:response to bacterium",1
+"P:response to cAMP",1
+"P:response to carbohydrate",1
+"P:response to cisplatin",1
+"P:response to electrical stimulus",1
+"P:response to estradiol",1
+"P:response to external stimulus",1
+"P:response to glucose",1
+"P:response to hydrogen peroxide",1
+"P:response to inorganic substance",1
+"P:response to insulin",1
+"P:response to ischemia",1
+"P:response to manganese ion",1
+"P:response to nicotine",1
+"P:response to nutrient",1
+"P:response to oxygen-containing compound",1
+"P:response to peptide hormone",1
+"P:response to resveratrol",1
+"P:response to starvation",1
+"P:response to temperature stimulus",1
+"P:response to testosterone",1
+"P:response to tumor necrosis factor",1
+"P:response to unfolded protein",1
+"P:response to vanadate(3-)",1
+"P:response to vitamin D",1
+"P:response to water deprivation",1
+"P:response to wounding",1
+"P:response to zinc ion",1
+"P:retina morphogenesis in camera-type eye",1
+"P:retinoic acid metabolic process",1
+"P:retrograde neuronal dense core vesicle transport",1
+"P:Rho protein signal transduction",1
+"P:rhythmic process",1
+"P:ribosomal large subunit export from nucleus",1
+"P:ribosome biogenesis",1
+"P:RNA phosphodiester bond hydrolysis",1
+"P:roof of mouth development",1
+"P:S-adenosylmethionine biosynthetic process",1
+"P:SCF-dependent proteasomal ubiquitin-dependent protein catabolic process",1
+"P:Schwann cell differentiation",1
+"P:sclerotome development",1
+"P:sensory perception of temperature stimulus",1
+"P:sensory processing",1
+"P:sequestering of TGFbeta in extracellular matrix",1
+"P:signaling",1
+"P:sister chromatid cohesion",1
+"P:skeletal muscle cell differentiation",1
+"P:skeletal muscle satellite cell migration",1
+"P:skeletal system morphogenesis",1
+"P:skin epidermis development",1
+"P:sodium ion import across plasma membrane",1
+"P:somatic motor neuron differentiation",1
+"P:somite rostral/caudal axis specification",1
+"P:somite specification",1
+"P:specification of proximal tubule identity",1
+"P:spermidine catabolic process",1
+"P:spinal cord dorsal/ventral patterning",1
+"P:spindle organization",1
+"P:stem cell population maintenance",1
+"P:stem vascular tissue pattern formation",1
+"P:steroid metabolic process",1
+"P:sterol biosynthetic process",1
+"P:subpallium development",1
+"P:suckling behavior",1
+"P:synapse organization",1
+"P:synapse pruning",1
+"P:synaptic transmission, cholinergic",1
+"P:synaptic vesicle maturation",1
+"P:T cell differentiation in thymus",1
+"P:thyroid hormone metabolic process",1
+"P:transformation of host cell by virus",1
+"P:transition between fast and slow fiber",1
+"P:translation",1
+"P:translational initiation",1
+"P:transmembrane receptor protein tyrosine phosphatase signaling pathway",1
+"P:transpiration",1
+"P:trehalose transport",1
+"P:tumor necrosis factor-mediated signaling pathway",1
+"P:type B pancreatic cell development",1
+"P:type I pneumocyte differentiation",1
+"P:tyrosine catabolic process",1
+"P:vasculogenesis",1
+"P:ventral spinal cord interneuron differentiation",1
+"P:ventricular cardiac muscle tissue morphogenesis",1
+"P:vesicle organization",1
+"P:vitamin B6 metabolic process",1
+"P:wing disc morphogenesis",1
+"P:Wnt signaling pathway",1
+"P:Wnt signaling pathway, planar cell polarity pathway",1
+"P:wound healing, spreading of cells",1
