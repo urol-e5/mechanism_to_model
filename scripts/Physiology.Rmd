@@ -5,6 +5,8 @@ date: "2024-10-02"
 output: html_document
 ---
 
+This script uses physiological variables (specifially symbiont density, chlorophyll a, tissue biomass, and Pmax) to make a PCA. This information will be used in downstream analysis. 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -28,10 +30,47 @@ data <- data %>%
   full_join(photo, by = "fragment.ID")
 ```
 
-Remove unneeded columns
+Select data for PCA
 ```{r}
-data <- data %>%
-  select(fragment.ID, treatment, surface.area, AFDW.mg.cm2., AFDW, chlA.ug.sample, chlA.ugcm2, chlA.pg.cell, zoox.cm2, zoox.per.cm2, E, Eh, lnc, Th, Topt, Pmax)
+pca_data <- data %>%
+  select(AFDW.mg.cm2., chlA.ugcm2, zoox.per.cm2, Pmax)
+```
+
+Run PCA 
+```{r}
+# Perform PCA on the selected data
+pca_result <- prcomp(pca_data, scale. = TRUE)
+
+# Calculate the proportion of variance explained by each principal component
+variance_explained <- pca_result$sdev^2 / sum(pca_result$sdev^2)
+
+# Extract the percentage of variance for PC1 and PC2
+pc1_var <- variance_explained[1] * 100
+pc2_var <- variance_explained[2] * 100
+
+# Extract PCA results for plotting
+pca_df <- as.data.frame(pca_result$x) %>%
+  bind_cols(data %>% select(treatment, fragment.ID))  # Add the treatment column
+
+# Create PCA plot with percentages added to axis labels
+ggplot(pca_df, aes(x = PC1, y = PC2, color = treatment)) +
+  geom_point(size = 3) +
+  labs(
+    x = paste0("Principal Component 1 (", round(pc1_var, 2), "% variance)"),
+    y = paste0("Principal Component 2 (", round(pc2_var, 2), "% variance)")
+  ) +
+  theme_minimal()
+```
+
+PC1 explains 65.2% of variance. Merge pca data back with all of the data and remove unneeded columns 
+```{r}
+data_pc <- data %>%
+  full_join(pca_df, by = "fragment.ID") %>%
+  select(fragment.ID, treatment.x, AFDW.mg.cm2., chlA.ugcm2, surface.area, zoox.per.cm2, Topt, Pmax, PC1, PC2, PC3, PC4) %>%
+  rename(treatment = treatment.x)
+
+# Save as csv 
+write.csv(data_pc, "../data/Physiology/phys_data_pc.csv")
 ```
 
 
