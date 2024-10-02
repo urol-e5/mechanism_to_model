@@ -15,9 +15,9 @@ library(tidyverse)
 
 Read in data 
 ```{r}
-afdw <- read.csv("../data/Physiology/AFDW.csv")
-chlo_sym <- read.csv("../data/Physiology/chl_zoox_sheet.csv")
-photo <- read.csv("../data/Physiology/Pmax_data.csv") %>%
+afdw <- read.csv("../data/01-Physiology/AFDW.csv")
+chlo_sym <- read.csv("../data/01-Physiology/chl_zoox_sheet.csv")
+photo <- read.csv("../data/01-Physiology/Pmax_data.csv") %>%
   filter(rate.type == "Gross Photosynthesis") %>%
   mutate(fragment.ID = str_replace(fragment.ID, "PV(\\d+)_L", "PV_\\1"))
 ```
@@ -70,7 +70,7 @@ data_pc <- data %>%
   rename(treatment = treatment.x)
 
 # Save as csv 
-write.csv(data_pc, "../data/Physiology/phys_data_pc.csv")
+write.csv(data_pc, "../data/01-Physiology/phys_data_pc.csv")
 ```
 
 
