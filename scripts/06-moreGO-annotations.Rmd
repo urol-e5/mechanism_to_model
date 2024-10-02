@@ -1,0 +1,55 @@
+---
+title: "04-Carbon-transport"
+output: html_document
+date: "2024-10-02"
+---
+
+![](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_QuickGOTerm_GO0034219_2024-10-02_11-46-38.png)
+
+
+```{bash}
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A0034219%29%29+AND+%28reviewed%3Atrue%29" -o ../output/04-carbon-transport/SwissProt-GO:0034219.fa
+```
+
+
+```{bash}
+head ../output/04-carbon-transport/SwissProt-GO:0034219.fa
+grep -c ">" ../output/04-carbon-transport/SwissProt-GO:0034219.fa
+```
+
+
+Lets Pver as query
+and SwissProt-GO:0034219 is the database. 
+
+
+```{bash}
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in ../output/04-carbon-transport/SwissProt-GO:0034219.fa \
+-dbtype prot \
+-out ../output/04-carbon-transport/SwissProt-GO:0034219
+```
+
+
+
+
+
+```{bash}
+fasta="../data/Pver_proteins_names_v1.0.faa"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastp \
+-query $fasta \
+-db ../output/04-carbon-transport/SwissProt-GO:0034219 \
+-out ../output/04-carbon-transport/Pver_blastp-GO:0034219_out.tab \
+-evalue 1E-05 \
+-num_threads 48 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+```
+
+
+```{bash}
+head ../output/04-carbon-transport/Pver_blastp-GO:0034219_out.tab
+wc -l ../output/04-carbon-transport/Pver_blastp-GO:0034219_out.tab
+```
+

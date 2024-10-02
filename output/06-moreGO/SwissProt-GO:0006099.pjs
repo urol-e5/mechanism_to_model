@@ -1,0 +1,22 @@
+{
+  "version": "1.2",
+  "dbname": "SwissProt-GO:0006099",
+  "dbtype": "Protein",
+  "db-version": 5,
+  "description": "../output/06-moreGO/SwissProt-GO:0006099.fa",
+  "number-of-letters": 1300181,
+  "number-of-sequences": 2771,
+  "last-updated": "2024-10-02T09:47:00",
+  "number-of-volumes": 1,
+  "bytes-total": 1965953,
+  "bytes-to-cache": 1325257,
+  "files": [
+    "SwissProt-GO:0006099.pdb",
+    "SwissProt-GO:0006099.phr",
+    "SwissProt-GO:0006099.pin",
+    "SwissProt-GO:0006099.pot",
+    "SwissProt-GO:0006099.psq",
+    "SwissProt-GO:0006099.ptf",
+    "SwissProt-GO:0006099.pto"
+  ]
+}
