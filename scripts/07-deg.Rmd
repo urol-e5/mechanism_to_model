@@ -47,11 +47,12 @@ merged_data_full %>% select(SWISS_GO.Names)
 split_SWISS_names <- unlist(str_split(merged_data_full$SWISS_GO.Names, "; "))
 
 # Step 3: Find unique terms
-unique_SWISS_names <- unique(split_SWISS_names) %>% filter(!is.na)
+unique_SWISS_names <- unique(split_SWISS_names) 
+unique_SWISS_names <- unique_SWISS_names[!is.na(unique_SWISS_names)]
 
 unique_SWISS_names 
 
-unique_SWISS_names_P <- unique_SWISS_names[str_detect(unique_SWISS_names, "P:")]
+unique_SWISS_names_P <- unique_SWISS_names[str_detect(unique_SWISS_names, "P:")] 
 
 length(unique_SWISS_names_P)
 
