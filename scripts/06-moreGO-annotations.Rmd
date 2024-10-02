@@ -151,6 +151,7 @@ wc -l ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
 library(readr)
 library(readxl)
 library(tidyverse)
+library(genefilter) #for pOverA filtering
 
 #install.packages("ComplexHeatmap")
 library(ComplexHeatmap)
@@ -158,12 +159,25 @@ library(ComplexHeatmap)
 count_mat <- read_csv("../data/RNAseq/Poc_gene_count_matrix.csv")
 all_genes <- count_mat$gene_id
 #count_mat <- count_mat %>% select(-gene_id)
-rownames(count_mat) <- all_genes
+#rownames(count_mat) <- all_genes
 
 # Clean up the column names
 colnames(count_mat) <- gsub("_R1.fastp-trim.20230215.fq.gz.sam.sorted.bam.merge.gtf", "", colnames(count_mat))
 
 dim(count_mat)
+```
+
+## pOverA filtering
+
+```{r}
+ffun<-filterfun(pOverA(0.25,10))  #set up filtering parameters
+counts <- count_mat %>% select(-gene_id)
+count_mat_poa <- genefilter((counts), ffun) #apply filter
+sum(count_mat_poa) #count number of genes left
+
+count_mat_poa <- count_mat[count_mat_poa,] #keep only rows that passed filter
+
+count_mat <- count_mat_poa
 ```
 
 The gene names in the count matrix and the blast dfs are not the same; this is due to naming errors made by the authors of the [Pverr genome paper](https://academic.oup.com/gbe/article/12/10/1911/5898631?login=false#supplementary-data). They made a supplementary file that has both naming iterations, so this will be used to make sure the gene names are the same in each df 
