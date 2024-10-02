@@ -141,3 +141,260 @@ fasta="../data/Pver_proteins_names_v1.0.faa"
 head ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
 wc -l ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
 ```
+
+
+
+## Vizualize in R using heatmaps
+
+```{r}
+# Load necessary libraries
+library(readr)
+library(readxl)
+library(tidyverse)
+
+#install.packages("ComplexHeatmap")
+library(ComplexHeatmap)
+ 
+count_mat <- read_csv("../data/RNAseq/Poc_gene_count_matrix.csv")
+all_genes <- count_mat$gene_id
+#count_mat <- count_mat %>% select(-gene_id)
+rownames(count_mat) <- all_genes
+
+# Clean up the column names
+colnames(count_mat) <- gsub("_R1.fastp-trim.20230215.fq.gz.sam.sorted.bam.merge.gtf", "", colnames(count_mat))
+
+dim(count_mat)
+```
+
+The gene names in the count matrix and the blast dfs are not the same; this is due to naming errors made by the authors of the [Pverr genome paper](https://academic.oup.com/gbe/article/12/10/1911/5898631?login=false#supplementary-data). They made a supplementary file that has both naming iterations, so this will be used to make sure the gene names are the same in each df 
+
+Read in file with gene name iterations 
+```{r}
+names <- read_excel("../data/RNAseq/FileS2_Pver_gene_annot_May28.xlsx", skip = 4) %>%
+  select(Query, Gene)
+
+count_mat <- count_mat %>% full_join(names, by = c("gene_id" = "Gene"))
+```
+
+##  Glycolysis (GO:0006096)
+
+```{r}
+go_term = "0006096"
+
+# Read the tab file for the specified GO term
+go_file_path <- paste0("../output/06-moreGO/Pver_blastp-GO:", go_term, "_out.tab")
+GO_data <- read_delim(go_file_path, delim = "\t", col_names = FALSE)
+
+colnames(GO_data) <- c("query_id", "subject_id", "percent_identity", "alignment_length", "mismatches", "gap_openings", 
+                       "q_start", "q_end", "s_start", "s_end", "e_value", "bit_score")
+
+head(GO_data)
+dim(GO_data)
+
+count_GO <- GO_data %>%
+  left_join(count_mat, by = c("query_id" = "Query")) %>%
+  na.omit()
+
+# Check the filtered result
+head(count_GO)
+dim(count_GO)
+```
+
+```{r}
+expression_data <- count_GO %>% select(-c(1:13))  # Adjust the column selection if necessary
+
+# Set row names to gene identifiers
+rownames(expression_data) <- count_GO$Gene
+
+# Convert expression data to a matrix
+expression_matrix <- as.matrix(expression_data)
+
+# Calculate Z-scores for the expression matrix
+z_score_matrix <- t(scale(t(expression_matrix)))
+
+# Replace NA/NaN with 0
+z_score_matrix[is.nan(z_score_matrix)] = 0
+```
+
+### heatmap
+
+```{r}
+# Create the heatmap using ComplexHeatmap
+Heatmap(z_score_matrix,
+         na_col = "black",
+         name = "Gene Count",         # Name for the heatmap color bar
+         row_title = paste("Genes in", go_term),               # Title for the row side
+         column_title = "Samples",           # Title for the column side
+         show_row_names = TRUE,              # Show gene names
+         show_column_names = TRUE,           # Show sample names
+         cluster_rows = TRUE,                # Cluster rows
+         cluster_columns = TRUE,             # Cluster columns
+         row_dend_reorder = TRUE,            # Reorder dendrogram based on clustering
+         column_dend_reorder = TRUE, column_names_gp = gpar(fontsize = 6),
+            # Reorder dendrogram based on clustering
+         heatmap_legend_param = list(title = "Gene Count"))
+
+# Create the heatmap using ComplexHeatmap
+Heatmap(z_score_matrix,
+         na_col = "black",
+         name = "Gene Count",         # Name for the heatmap color bar
+         row_title = paste("Genes in", go_term),    # Title for the row side
+         column_title = "Samples",           # Title for the column side
+         show_row_names = TRUE,              # Show gene names
+         show_column_names = TRUE,           # Show sample names
+         cluster_rows = TRUE,                # Cluster rows
+         cluster_columns = FALSE,             # Cluster columns
+         row_dend_reorder = TRUE,            # Reorder dendrogram based on clustering
+         column_dend_reorder = FALSE, column_names_gp = gpar(fontsize = 6),
+            # Reorder dendrogram based on clustering
+         heatmap_legend_param = list(title = "Gene Count"))
+```
+
+## Tricarboxylic Acid Cycle (GO:0006099)
+
+```{r}
+go_term = "0006099"
+
+# Read the tab file for the specified GO term
+go_file_path <- paste0("../output/06-moreGO/Pver_blastp-GO:", go_term, "_out.tab")
+GO_data <- read_delim(go_file_path, delim = "\t", col_names = FALSE)
+
+colnames(GO_data) <- c("query_id", "subject_id", "percent_identity", "alignment_length", "mismatches", "gap_openings", 
+                       "q_start", "q_end", "s_start", "s_end", "e_value", "bit_score")
+
+head(GO_data)
+dim(GO_data)
+
+count_GO <- GO_data %>%
+  left_join(count_mat, by = c("query_id" = "Query")) %>%
+  na.omit()
+
+# Check the filtered result
+head(count_GO)
+dim(count_GO)
+```
+
+```{r}
+expression_data <- count_GO %>% select(-c(1:13))  # Adjust the column selection if necessary
+
+# Set row names to gene identifiers
+rownames(expression_data) <- count_GO$Gene
+
+# Convert expression data to a matrix
+expression_matrix <- as.matrix(expression_data)
+
+# Calculate Z-scores for the expression matrix
+z_score_matrix <- t(scale(t(expression_matrix)))
+
+# Replace NA/NaN with 0
+z_score_matrix[is.nan(z_score_matrix)] = 0
+```
+
+### heatmap
+
+```{r}
+# Create the heatmap using ComplexHeatmap
+Heatmap(z_score_matrix,
+         na_col = "black",
+         name = "Gene Count",         # Name for the heatmap color bar
+         row_title = paste("Genes in", go_term),               # Title for the row side
+         column_title = "Samples",           # Title for the column side
+         show_row_names = TRUE,              # Show gene names
+         show_column_names = TRUE,           # Show sample names
+         cluster_rows = TRUE,                # Cluster rows
+         cluster_columns = TRUE,             # Cluster columns
+         row_dend_reorder = TRUE,            # Reorder dendrogram based on clustering
+         column_dend_reorder = TRUE, column_names_gp = gpar(fontsize = 6),
+            # Reorder dendrogram based on clustering
+         heatmap_legend_param = list(title = "Gene Count"))
+
+# Create the heatmap using ComplexHeatmap
+Heatmap(z_score_matrix,
+         na_col = "black",
+         name = "Gene Count",         # Name for the heatmap color bar
+         row_title = paste("Genes in", go_term),    # Title for the row side
+         column_title = "Samples",           # Title for the column side
+         show_row_names = TRUE,              # Show gene names
+         show_column_names = TRUE,           # Show sample names
+         cluster_rows = TRUE,                # Cluster rows
+         cluster_columns = FALSE,             # Cluster columns
+         row_dend_reorder = TRUE,            # Reorder dendrogram based on clustering
+         column_dend_reorder = FALSE, column_names_gp = gpar(fontsize = 6),
+            # Reorder dendrogram based on clustering
+         heatmap_legend_param = list(title = "Gene Count"))
+```
+
+## Oxidative phosphorylation (GO:0006119)
+
+```{r}
+go_term = "0006119"
+
+# Read the tab file for the specified GO term
+go_file_path <- paste0("../output/06-moreGO/Pver_blastp-GO:", go_term, "_out.tab")
+GO_data <- read_delim(go_file_path, delim = "\t", col_names = FALSE)
+
+colnames(GO_data) <- c("query_id", "subject_id", "percent_identity", "alignment_length", "mismatches", "gap_openings", 
+                       "q_start", "q_end", "s_start", "s_end", "e_value", "bit_score")
+
+head(GO_data)
+dim(GO_data)
+
+count_GO <- GO_data %>%
+  left_join(count_mat, by = c("query_id" = "Query")) %>%
+  na.omit()
+
+# Check the filtered result
+head(count_GO)
+dim(count_GO)
+```
+
+
+```{r}
+expression_data <- count_GO %>% select(-c(1:13))  # Adjust the column selection if necessary
+
+# Set row names to gene identifiers
+rownames(expression_data) <- count_GO$Gene
+
+# Convert expression data to a matrix
+expression_matrix <- as.matrix(expression_data)
+
+# Calculate Z-scores for the expression matrix
+z_score_matrix <- t(scale(t(expression_matrix)))
+
+# Replace NA/NaN with 0
+z_score_matrix[is.nan(z_score_matrix)] = 0
+```
+
+### heatmap
+
+```{r}
+# Create the heatmap using ComplexHeatmap
+Heatmap(z_score_matrix,
+         na_col = "black",
+         name = "Gene Count",         # Name for the heatmap color bar
+         row_title = paste("Genes in", go_term),               # Title for the row side
+         column_title = "Samples",           # Title for the column side
+         show_row_names = TRUE,              # Show gene names
+         show_column_names = TRUE,           # Show sample names
+         cluster_rows = TRUE,                # Cluster rows
+         cluster_columns = TRUE,             # Cluster columns
+         row_dend_reorder = TRUE,            # Reorder dendrogram based on clustering
+         column_dend_reorder = TRUE, column_names_gp = gpar(fontsize = 6),
+            # Reorder dendrogram based on clustering
+         heatmap_legend_param = list(title = "Gene Count"))
+
+# Create the heatmap using ComplexHeatmap
+Heatmap(z_score_matrix,
+         na_col = "black",
+         name = "Gene Count",         # Name for the heatmap color bar
+         row_title = paste("Genes in", go_term),    # Title for the row side
+         column_title = "Samples",           # Title for the column side
+         show_row_names = TRUE,              # Show gene names
+         show_column_names = TRUE,           # Show sample names
+         cluster_rows = TRUE,                # Cluster rows
+         cluster_columns = FALSE,             # Cluster columns
+         row_dend_reorder = TRUE,            # Reorder dendrogram based on clustering
+         column_dend_reorder = FALSE, column_names_gp = gpar(fontsize = 6),
+            # Reorder dendrogram based on clustering
+         heatmap_legend_param = list(title = "Gene Count"))
+```
