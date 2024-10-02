@@ -17,13 +17,51 @@ library(genefilter) #for pOverA filtering
 library(ComplexHeatmap)
  
 annot_GO_terms_host <- read_csv("../data/annot_GO.terms.host.csv") %>% select(-1)
+
+full_annot <- read_csv("../data/pver_annot_full.csv") %>% select(-1) %>% mutate(gene_id = str_remove(gene_id, "\\.t.*$"))
+
 DEGs <- read_csv("../data/DEGSeq2.sig.results.host.csv") %>% select(-1)
 
 # Merge the data frames by 'gene_id'
 merged_data <- left_join(DEGs, annot_GO_terms_host, by = "gene_id") %>% filter(GO.ID != "unknown")
 
 write_csv(merged_data, "../data/merged_DEG_GO_data.csv")
+
+# merge full annotation
+merged_data_full <- left_join(DEGs, full_annot, by = "gene_id") 
+
+write_csv(merged_data_full, "../data/merged_DEG_full_annot.csv")
 ```
+
+```{r}
+library(stringr)
+
+# Assuming your data is in a dataframe called df and the column is named 'your_column'
+count_P <- sum(str_count(merged_data_full$SWISS_GO.Names[!is.na(merged_data_full$SWISS_GO.Names)], "P:")) 
+
+# Print the result
+count_P
+
+split_SWISS_names <- unlist(str_split(merged_data_full$SWISS_GO.Names, "; "))
+split_SWISS_names_P <- split_SWISS_names[str_detect(split_SWISS_names, "P:")] 
+split_SWISS_names_P <- split_SWISS_names_P[!is.na(split_SWISS_names_P)]
+
+unique_SWISS_names_P <- unique(split_SWISS_names_P)
+
+length(unique_SWISS_names_P)
+
+write.csv(unique_SWISS_names_P, file = "../output/07-degs/unique_P_SWISS_terms.csv", row.names = FALSE)
+```
+
+
+```{r}
+split_SWISS_names
+```
+
+
+
+
+
 load in count data
 
 ```{r}
