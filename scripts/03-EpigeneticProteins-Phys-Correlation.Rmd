@@ -100,7 +100,7 @@ correlation_results <- count_phys %>%
   filter(p.value <= 0.05) %>%
   arrange(desc(estimate)) %>%
   mutate(query_id = factor(query_id, levels = query_id[order(estimate)]))
-
+#correlation_results <- correlation_results[c(443:453),]
 
 head(correlation_results)
 
@@ -128,7 +128,17 @@ ggplot(correlation_results, aes(x = query_id, y = 1, fill = estimate)) +
         legend.text = element_text(size = 8))  # Customize legend text size
 ```
 
+Plot correlations with x axis as PC1 and y axis as gene counts. 
+```{r}
+sig_prot <- correlation_results$query_id
 
+subset_count_phys <- count_phys %>%
+  filter(query_id %in% sig_prot)
+
+ggplot(subset_count_phys, aes(x = PC1, y = value)) + 
+  geom_point(size = 3) +
+  facet_wrap(~query_id, scales = "free")
+```
 
 
 
