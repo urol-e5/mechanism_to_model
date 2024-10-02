@@ -1,0 +1,23 @@
+---
+title: "04-Carbon-transport"
+output: html_document
+date: "2024-10-02"
+---
+
+![](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_QuickGOTerm_GO0034219_2024-10-02_11-46-38.png)
+
+
+```{bash}
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A0034219%29%29+AND+%28reviewed%3Atrue%29" -o ../output/04-carbon-transport/SwissProt-GO:0034219.fa
+```
+
+
+```{bash}
+head ../output/04-carbon-transport/SwissProt-GO:0034219.fa
+grep -c ">" ../output/04-carbon-transport/SwissProt-GO:0034219.fa
+```
+
+
+Lets Pver as query
+and SwissProt-GO:0034219 is the database. 
+
