@@ -12,12 +12,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(readxl)
+library(reshape2)
 ```
 
 Read in gene count matrix. 
 ```{r}
-count_matrix <- read.csv("../data/RNAseq/Poc_gene_count_matrix.csv") %>%
-  rename_with(~ str_remove(., "_.*"), -gene_id)
+count_matrix <- read.csv("../data/RNAseq/gene_count_matrix_filtered.csv") %>%
+  rename("gene_id" = "X")
 head(count_matrix)
 
 # Metadata for RNAseq
@@ -39,7 +40,9 @@ The gene names in the count matrix and the blast dfs are not the same; this is d
 Read in file with gene name iterations 
 ```{r}
 names <- read_excel("../data/RNAseq/FileS2_Pver_gene_annot_May28.xlsx", skip = 4) %>%
-  select(Query, Gene)
+  select(Query, Gene) %>%
+  mutate(Gene = gsub("_gene", "", Gene))
+names$Gene <- gsub(names$Gene, "_gene", "")
 ```
 
 Join names df with the blast df 
@@ -51,11 +54,71 @@ blast_names <- blast %>%
 Join blast_names df with count matrix 
 ```{r}
 count_blast <- blast_names %>%
-  full_join(count_matrix, by = c("Gene" = "gene_id")) %>%
-  na.omit()
+  full_join(count_matrix, by = c("Gene" = "gene_id"))
+str(count_blast)
 ```
 
-Zoe will make heatmap 
+```{r}
+reshaped_data <- count_blast %>%
+  # Pivot longer to stack values
+  pivot_longer(cols = C17:E9, 
+               names_to = "sample", 
+               values_to = "value")
+```
+
+Join with RNA metadata 
+```{r}
+reshaped_data <- reshaped_data %>%
+  full_join(rna_meta, by = c("sample" = "sample_id"))
+```
+
+Read in phys PC data
+```{r}
+phys_pc <- read.csv("../data/01-Physiology/phys_data_pc.csv")
+```
+
+Join phys data with reshaped data df 
+```{r}
+count_phys <- phys_pc %>%
+  full_join(reshaped_data, by = "fragment.ID") %>%
+  na.omit()
+
+count_phys$value <- as.numeric(count_phys$value)
+```
+
+Run correlation 
+```{r}
+correlation_results <- count_phys %>%
+  group_by(query_id) %>%
+  summarize(
+    correlation = list(cor.test(PC1, value))) %>%
+  mutate(
+    estimate = map_dbl(correlation, ~ .$estimate),
+    p.value = map_dbl(correlation, ~ .$p.value)
+  ) %>%
+  select(query_id, estimate, p.value)# %>%
+  #filter(p.value <= 0.05)
+```
+
+
+```{r}
+ggplot(correlation_results, aes(x = query_id, y = 1, fill = estimate)) +
+  geom_tile(color = "white") +  # Create the tiles
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +  # Color gradient
+  geom_text(aes(label = round(estimate, 2)), color = "black") +  # Add text labels
+  labs(title = "Heatmap of Correlation Estimates",
+       x = "Query ID",
+       y = "") +  # y-axis label empty for a single row
+  theme_minimal() +  # Use a minimal theme
+  coord_flip() +
+  theme(axis.text.y = element_blank(),  # Hide y-axis text
+        axis.ticks.y = element_blank(),  # Hide y-axis ticks
+        panel.grid.major = element_blank(),  # Remove major grid lines
+        panel.grid.minor = element_blank(),  # Remove minor grid lines
+        legend.title = element_text(size = 10),  # Customize legend title size
+        legend.text = element_text(size = 8))  # Customize legend text size
+```
+
 
 
 
