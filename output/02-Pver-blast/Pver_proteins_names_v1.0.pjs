@@ -1,0 +1,22 @@
+{
+  "version": "1.2",
+  "dbname": "Pver_proteins_names_v1.0",
+  "dbtype": "Protein",
+  "db-version": 5,
+  "description": "../data/Pver_proteins_names_v1.0.faa",
+  "number-of-letters": 17115890,
+  "number-of-sequences": 27439,
+  "last-updated": "2024-10-02T08:23:00",
+  "number-of-volumes": 1,
+  "bytes-total": 19980089,
+  "bytes-to-cache": 17362978,
+  "files": [
+    "Pver_proteins_names_v1.0.pdb",
+    "Pver_proteins_names_v1.0.phr",
+    "Pver_proteins_names_v1.0.pin",
+    "Pver_proteins_names_v1.0.pot",
+    "Pver_proteins_names_v1.0.psq",
+    "Pver_proteins_names_v1.0.ptf",
+    "Pver_proteins_names_v1.0.pto"
+  ]
+}
