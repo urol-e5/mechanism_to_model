@@ -1,0 +1,105 @@
+---
+title: "Apul Annotation"
+author: "Steven Roberts"
+date: "`r format(Sys.time(), '%d %B, %Y')`"  
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true
+  html_document:
+    theme: readable
+    highlight: zenburn
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+library(kableExtra)
+library(DT)
+library(Biostrings)
+library(tm)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center", # Align plots to the center
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+
+Apul new genome 
+
+# genes 
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/output/07-Apul-Hisat/genes.fasta
+
+pulled via gff
+
+```{bash}
+cd ../data
+curl -o Apul-genes.fasta https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/output/07-Apul-Hisat/genes.fasta
+
+```
+
+
+
+```{bash}
+gunzip -c ../data/Pver_proteins_names_v1.0.faa.gz > ../data/Pver_proteins_names_v1.0.faa
+```
+
+```{bash}
+head ../data/Apul-genes.fasta
+```
+
+
+
+---
+
+```{bash}
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in ../data/Apul-genes.fasta \
+-dbtype nucl \
+-out ../output/08-Apul-epimods-blast/Apul-genes
+```
+
+
+
+
+
+
+
+```{bash}
+fasta="../data/Machinery.fasta"
+
+/home/shared/ncbi-blast-2.15.0+/bin/tblastn \
+-query $fasta \
+-db ../output/08-Apul-epimods-blast/Apul-genes \
+-out ../output/08-Apul-epimods-blast/Mach-tblastn-Apul_out.tab \
+-evalue 1E-05 \
+-num_threads 48 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6 \
+2>/dev/null
+```
+
+```{r, engine='bash'}        
+wc -l ../output/08-Apul-epimods-blast/Mach-tblastn-Apul_out.tab
+```
+
+```{r, engine='bash'}        
+head ../output/08-Apul-epimods-blast/Mach-tblastn-Apul_out.tab
+```
