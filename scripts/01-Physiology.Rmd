@@ -5,7 +5,7 @@ date: "2024-10-02"
 output: html_document
 ---
 
-This script uses physiological variables (specifially symbiont density, chlorophyll a, tissue biomass, and Pmax) to make a PCA. This information will be used in downstream analysis. 
+This script uses physiological variables to make principal component axes to condense the physiological information. This information will be correlated with counts of specific genes of interest. 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -13,11 +13,15 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
+### Pocillopora 
+
+Physiology data is from [Becker et al. 2021](https://link.springer.com/article/10.1007/s00338-021-02138-2), which examined the effect of chronic low level nutrient enrichment on Pocillopora spp. Holobiont biomass, chlorophyll a, symbiont density, and Pmax were selected as physiological variables to make PC1. 
+
 Read in data 
 ```{r}
-afdw <- read.csv("../data/01-Physiology/AFDW.csv")
-chlo_sym <- read.csv("../data/01-Physiology/chl_zoox_sheet.csv")
-photo <- read.csv("../data/01-Physiology/Pmax_data.csv") %>%
+afdw <- read.csv("../data/01-Physiology/AFDW_poc.csv")
+chlo_sym <- read.csv("../data/01-Physiology/chl_zoox_sheet_poc.csv")
+photo <- read.csv("../data/01-Physiology/Pmax_data_poc.csv") %>%
   filter(rate.type == "Gross Photosynthesis") %>%
   mutate(fragment.ID = str_replace(fragment.ID, "PV(\\d+)_L", "PV_\\1"))
 ```
@@ -70,9 +74,11 @@ data_pc <- data %>%
   rename(treatment = treatment.x)
 
 # Save as csv 
-write.csv(data_pc, "../data/01-Physiology/phys_data_pc.csv")
+write.csv(data_pc, "../data/01-Physiology/phys_data_pc_poc.csv")
 ```
 
+
+### Acropora pulchra  
 
 
 
