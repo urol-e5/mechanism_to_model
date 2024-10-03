@@ -15,14 +15,18 @@ library(readxl)
 library(reshape2)
 ```
 
+### Pocillopora 
+
+This data is from [Becker et al. 2021](https://link.springer.com/article/10.1007/s00338-021-02138-2), which examined the effect of chronic low level nutrient enrichment on Pocillopora spp. The github for that project is [here](https://github.com/daniellembecker/Chronic_low_nutrient_enrichment_benefits_coral_thermal_performance_fore_reef_habitat). 
+
 Read in gene count matrix. 
 ```{r}
-count_matrix <- read.csv("../data/RNAseq/gene_count_matrix_filtered.csv") %>%
+count_matrix <- read.csv("../data/RNAseq/gene_count_matrix_filtered_poc.csv") %>%
   rename("gene_id" = "X")
 head(count_matrix)
 
 # Metadata for RNAseq
-rna_meta <- read.csv("../data/RNAseq/metadata.RNAseq.csv")
+rna_meta <- read.csv("../data/RNAseq/metadata.RNAseq_poc.csv")
 ```
 The RNA and physiology samples do not have the same name, so the RNAseq metadata will be needed downstream. 
 
@@ -74,7 +78,7 @@ reshaped_data <- reshaped_data %>%
 
 Read in phys PC data
 ```{r}
-phys_pc <- read.csv("../data/01-Physiology/phys_data_pc.csv")
+phys_pc <- read.csv("../data/01-Physiology/phys_data_pc_poc.csv")
 ```
 
 Join phys data with reshaped data df 
@@ -86,9 +90,31 @@ count_phys <- phys_pc %>%
 count_phys$value <- as.numeric(count_phys$value)
 ```
 
-Run correlation 
+ID outliers 
 ```{r}
-correlation_results <- count_phys %>%
+identify_outliers <- function(x) {
+  Q1 <- quantile(x, 0.25)
+  Q3 <- quantile(x, 0.75)
+  IQR <- Q3 - Q1
+  lower_bound <- Q1 - 1.5 * IQR
+  upper_bound <- Q3 + 1.5 * IQR
+  return(x < lower_bound | x > upper_bound)
+}
+
+# Flag and sum outliers by group
+count_phys_outliers <- count_phys %>%
+  group_by(query_id) %>%
+  mutate(is_outlier = identify_outliers(value)) #%>%
+  #summarise(total_outliers = sum(is_outlier))
+
+# Remove outliers 
+count_phys_no_outliers <- count_phys_outliers %>%
+  filter(is_outlier == FALSE)
+```
+
+Run correlation
+```{r}
+correlation_results_no_outliers <- count_phys_no_outliers %>%
   group_by(query_id) %>%
   summarize(
     correlation = list(cor.test(PC1, value))) %>%
@@ -99,46 +125,63 @@ correlation_results <- count_phys %>%
   select(query_id, estimate, p.value) %>%
   filter(p.value <= 0.05) %>%
   arrange(desc(estimate)) %>%
-  mutate(query_id = factor(query_id, levels = query_id[order(estimate)]))
-#correlation_results <- correlation_results[c(443:453),]
+  #filter(estimate > 0) %>%
+  mutate(query_id = factor(query_id, levels = query_id[order(estimate)])) %>%
+  filter(!query_id =="USP53-201") # remove duplicate protein 
 
-head(correlation_results)
-
-write.csv(correlation_results, "../output/03-EpigeneticProteins-Phys-Correlation/epi_protein_correlation.csv")
+write.csv(correlation_results_no_outliers, "../output/03-EpigeneticProteins-Phys-Correlation/epi_protein_correlation_poc.csv")
 ```
 
-Plot correlation heatmap with the x axis being epigenetic proteins. Only plotting the correlations that have pvalue <= 0.05. 
+Subset df by significant correlation and plot 
 ```{r}
-ggplot(correlation_results, aes(x = query_id, y = 1, fill = estimate)) +
-  geom_tile(color = "white") +  # Create the tiles
-  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +  # Color gradient
-  geom_text(aes(label = round(estimate, 2)), color = "black") +  # Add text labels
-  labs(title = "p≤0.05",
-       x = "Epigenetic Protein",
-       y = "") +  # y-axis label empty for a single row
-  theme_minimal() +  # Use a minimal theme
-  coord_flip() +  # Flip the coordinates so that the Query IDs are on the y-axis
-  theme(axis.text.y = element_text(size = 8, color = "black"),  # Display and customize y-axis labels (Query IDs)
-        axis.ticks.y = element_blank(),  # Hide y-axis ticks
-        axis.text.x = element_blank(),
-        axis.title = element_text(size = 10),
-        panel.grid.major = element_blank(),  # Remove major grid lines
-        panel.grid.minor = element_blank(),  # Remove minor grid lines
-        legend.title = element_text(size = 10),  # Customize legend title size
-        legend.text = element_text(size = 8))  # Customize legend text size
-```
+sig_prot <- correlation_results_no_outliers$query_id
 
-Plot correlations with x axis as PC1 and y axis as gene counts. 
-```{r}
-sig_prot <- correlation_results$query_id
+# Subset by significant correlations 
+subset_count_phys_no_outliers <- count_phys_no_outliers %>%
+  filter(query_id %in% sig_prot) %>%
+  full_join(correlation_results_no_outliers, by = "query_id")
 
-subset_count_phys <- count_phys %>%
-  filter(query_id %in% sig_prot)
-
-ggplot(subset_count_phys, aes(x = PC1, y = value)) + 
+ggplot(subset_count_phys_no_outliers, aes(x = PC1, y = value, color = query_id)) + 
   geom_point(size = 3) +
-  facet_wrap(~query_id, scales = "free")
+  geom_smooth(method = "lm", se = FALSE, linetype = "solid", color = "black") +
+  geom_text(data = subset_count_phys_no_outliers[!duplicated(subset_count_phys_no_outliers$query_id), ], 
+            aes(label = paste("Estimate:", round(estimate, 2))), 
+            x = Inf, y = Inf, hjust = 1.1, vjust = 1.5, size = 3, inherit.aes = FALSE) +
+  #scale_color_manual(values = c("Significant" = "red", "Not Significant" = "black")) +
+  facet_wrap(~query_id, scales = "free") +
+  theme(legend.position = "none")
 ```
+
+### Acropora pulchra 
+
+Data is from Danielle's 2022 experiment, which examined the physiological and molecular effects of a simulated marine heatwave on Acropora pulchra. The github for that project is [here](https://github.com/daniellembecker/A.pul_Heatwave/tree/master). 
+
+Read in gene count matrix. 
+```{r}
+###### gene counts matrix from apul genome 
+
+# Metadata for RNAseq - may not need 
+```
+
+Read in blast results for Pverr against epigenetic proteins of interest 
+```{r}
+blast_apul <- read.delim("../output/08-Apul-epimods-blast/Mach-tblastn-Apul_out.tab", sep = "", header = F)
+colnames(blast_apul) <- c("query_id", "subject_id", "percent_identity", "alignment_length", 
+                     "mismatches", "gap_openings", "q_start", "q_end", "s_start", 
+                     "s_end", "e_value", "bit_score")
+head(blast_apul)
+```
+
+
+May need to do some naming stuff 
+
+join with phys data 
+
+id outliers 
+
+run correlation
+
+Subset df by significant correlation and plot 
 
 
 

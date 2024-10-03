@@ -1,0 +1,13 @@
+﻿date.sample.taken,cohort,ID,treatment,dpf,time,bioinf.ID,tube.num,rep,type,parent,number.of.sample,preservation.type,experiment,storage,notes
+20221029,20221023,C1,ambient,6,17:00,260,260,1,larvae,ambient,50,RNA/DNA shield,heatwave larval timeseries,"URI freezer G, first row, rack z",
+20221029,20221023,C1,ambient,6,17:00,261,261,2,larvae,ambient,50,RNA/DNA shield,heatwave larval timeseries,"URI freezer G, first row, rack z",
+20221029,20221023,C1,ambient,6,17:00,262,262,3,larvae,ambient,50,RNA/DNA shield,heatwave larval timeseries,"URI freezer G, first row, rack z",
+20221029,20221023,D3,ambient,6,17:00,248,248,1,larvae,heatwave,50,RNA/DNA shield,heatwave larval timeseries,"URI freezer G, first row, rack z",
+20221029,20221023,D3,ambient,6,17:00,249,249,2,larvae,heatwave,50,RNA/DNA shield,heatwave larval timeseries,"URI freezer G, first row, rack z",
+20221029,20221023,D3,ambient,6,17:00,250,250,3,larvae,heatwave,50,RNA/DNA shield,heatwave larval timeseries,"URI freezer G, first row, rack z",
+20220418,NA,ACR_5_5,ambient,TP5,NA,5,ACR_5_5_20220418,1,adult,ambient,~0.5cm diameter tissue,RNA/DNA shield,heatwave timeseries timepoint 5,"URI freezer G, first row, rack z",
+20220418,NA,ACR_8_5,ambient,TP5,NA,8,ACR_8_5_20220418,1,adult,ambient,~0.5cm diameter tissue,RNA/DNA shield,heatwave timeseries timepoint 5,"URI freezer G, first row, rack z",
+20220418,NA,ACR_12_5,ambient,TP5,NA,12,ACR_12_5_20220418,1,adult,ambient,~0.5cm diameter tissue,RNA/DNA shield,heatwave timeseries timepoint 5,"URI freezer G, first row, rack z",
+20220418,NA,ACR_16_5,heatwave,TP5,NA,16,ACR_16_5_20220418,1,adult,heatwave,~0.5cm diameter tissue,RNA/DNA shield,heatwave timeseries timepoint 5,"URI freezer G, first row, rack z",
+20220418,NA,ACR_20_5,heatwave,TP5,NA,20,ACR_20_5_20220418,1,adult,heatwave,~0.5cm diameter tissue,RNA/DNA shield,heatwave timeseries timepoint 5,"URI freezer G, first row, rack z",
+20220418,NA,ACR_24_5,heatwave,TP5,NA,24,ACR_24_5_20220418,1,adult,heatwave,~0.5cm diameter tissue,RNA/DNA shield,heatwave timeseries timepoint 5,"URI freezer G, first row, rack z",

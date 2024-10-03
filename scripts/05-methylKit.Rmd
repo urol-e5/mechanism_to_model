@@ -11,61 +11,7 @@ I am identifying differentially methylated loci using methylkit based on [Yaamin
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = "/project/pi_hputnam_uri_edu/mechanism_to_model/output/05-methylKit/") #Set root directory
 ```
-
-# Process bam files for methylkit, on unity
-
-to go to interactive mode in unity: `salloc -p cpu -c 8 --mem 32G`
-
-```{bash}
-#!/usr/bin/env bash
-#SBATCH --export=NONE
-#SBATCH --nodes=1 --ntasks-per-node=30
-#SBATCH --signal=2
-#SBATCH --no-requeue
-#SBATCH --mem=100GB
-#SBATCH --error="outs_errs/%x_error.%j"
-#SBATCH --output="outs_errs/%x_output.%j"
-#SBATCH -t 24:00:00
-#SBATCH --mail-type=BEGIN,END,FAIL
-
-# load modules needed
-
-module load uri/main
-module load all/Bismark/0.23.1-foss-2021b
-module load SAMtools/1.18-GCC-12.3.0
-
-#Sort for Downstream Applications
-
-cd ../data/WGBS/
-
-mkdir ../../output/05-methylKit/bismark
-
-find *deduplicated.bam | \
-xargs basename -s .bam | \
-xargs -I{} samtools \
-sort --threads 28 {}.bam \
--o ../../output/05-methylKit/bismark/{}.sorted.bam
-
-#Index for Downstream Applications
-
-cd ../../output/05-methylKit/bismark/
-
-find *.sorted.bam | \
-xargs basename -s .sorted.bam | \
-xargs -I{} samtools \
-index -@ 28 {}.sorted.bam
-
-# Generate Bismark HTML processing report
-bismark2report
-
-# Generate Bismark summary report
-bismark2summary
-```
-
-
-
 
 # Install packages to run methylkit
 
@@ -75,7 +21,7 @@ bismark2summary
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-BiocManager::install("methylKit")
+#BiocManager::install("methylKit")
 require(methylKit)
 
 #install.packages("tidyverse")
@@ -92,6 +38,7 @@ require(tidyverse)
 require(vegan)
 require(gplots)
 require(dichromat)
+require(readr)
 ```
 
 # Obtain session information
@@ -100,9 +47,251 @@ require(dichromat)
 sessionInfo()
 ```
 
+# load in files from bismark
+
 ```{r}
+analysisFiles <- as.list(list.files("/project/pi_hputnam_uri_edu/mechanism_to_model/output/05-methylKit/merged_cpg", full.names=T)) #Put all .cov files into a list for analysis.
+
+analysisFiles
+```
+
+```{r, eval = FALSE}
+metadata_WGBS <- read_csv("../data/metadata.WGBS.csv")
+
+# Extract numbers from bam_list filenames
+file_numbers <- gsub("^.*\\/([0-9]+)\\.CpG_report.*$", "\\1", analysisFiles)
+file_numbers
+# Create a new dataframe with bam numbers and corresponding sample information
+merged_data <- data.frame(File_Number = as.numeric(file_numbers))
+
+# Add Sample.ID from the CSV based on matching Bam_Number to Sample.ID
+merged_data$fragment.ID <- metadata_WGBS$fragment.ID[match(merged_data$File_Number, metadata_WGBS$Sample.ID)]
+
+merged_data$treatment <- metadata_WGBS$treatment[match(merged_data$File_Number, metadata_WGBS$Sample.ID)]
+
+# Convert treatment values: 1 for "enriched", 0 for "control"
+merged_data$treatment <- ifelse(merged_data$treatment == "enriched", 1, 
+                                 ifelse(merged_data$treatment == "control", 0, NA))
+
+# Display the updated merged_data
+print(merged_data)
+```
+
+I'll use `methRead` to create a methylation object from the coverage files, and include sample ID and treatment information.
+
+```{r}
+processedFiles <- methylKit::methRead(analysisFiles,
+                                      sample.id = as.list(file_numbers),
+                                      assembly = "Pver",
+                                      treatment = merged_data$treatment,
+                                      pipeline = "bismarkCoverage",
+                                      mincov = 2) #Process files. Treatment specified based on ploidy status. Use mincov = 2 to quickly process reads.
+```
+
+### Save the MethylKit object; re-doing the previous step is memory/time intensive, so best to use the saved object moving forward. 
+
+```{r, eval = FALSE}
+save(processedFiles, file = "../output/05-methylKit/processedFiles") 
+```
+
+```{r}
+processedFilteredFilesCov5 <- methylKit::filterByCoverage(processedFiles,
+                                                          lo.count = 5, lo.perc = NULL,
+                                                          high.count = NULL, high.perc = 99.9) %>%
+  methylKit::normalizeCoverage(.)
+
+#Filter coverage information for minimum 5x coverage, and remove PCR duplicates by excluding data in the 99.9th percentile of coverage with hi.perc = 99.9. Normalize coverage between samples to avoid over-sampling reads from one sample during statistical testing
+```
+
+```{r}
+meth_filter=methylKit::unite(processedFilteredFilesCov5)
+ 
+clusterSamples(meth_filter, dist="correlation", method="ward", plot=TRUE)
+
+PCASamples(meth_filter)
+```
+
+# Exclude samples 19 and 2
+
+```{r}
+outliers <- c(19,2)
+outliers_pos <- which(merged_data$File_Number %in% c(19,2))
+outliers_frags <- merged_data$fragment.ID[which(merged_data$File_Number %in% c(19,2))]
+
+samples_outrm <- setdiff(as.list(file_numbers),outliers)
+treatment_outrm <- merged_data$treatment[-outliers_pos]
+frags_outrm <- merged_data$fragment.ID[-outliers_pos]
+
+processedFilteredFilesCov5_outrm <- methylKit::reorganize(processedFilteredFilesCov5,
+                                               sample.ids = samples_outrm,
+                                               treatment = treatment_outrm)
+```
+
+```{r}
+meth_filter_rmout=methylKit::unite(processedFilteredFilesCov5_outrm)
+ 
+clusterSamples(meth_filter_rmout, dist="correlation", method="ward", plot=TRUE)
+
+PCASamples(meth_filter_rmout)
+```
+
+# Characterize general methylation
+
+## Sample-specific descriptive statistics
+
+### Specify working directory for output
+
+```{bash}
+mkdir ../output/05-methylKit/general-stats
+```
+
+```{r}
+nFiles <- 30 #Count number of samples
+fileName <- data.frame("nameBase" = rep("../output/05-methylKit/general-stats/percent-CpG-methylation", times = nFiles),
+                       "nameBase2" = rep("../output/05-methylKit/general-stats/percent-CpG-coverage", times = nFiles),
+                       "fragment.ID" = frags_outrm,
+                       "File_Number" = unlist(samples_outrm),
+                       "treatment" = treatment_outrm) #Create new dataframe for filenames.
+head(fileName) #Confirm dataframe creation
+```
+
+```{r}
+fileName$actualFileName1 <- paste(fileName$nameBase, "-Filtered", "-5xCoverage-", fileName$fragment.ID, "_", fileName$treatment,".jpeg", sep = "") #Create a new column for the full filename for filtered + 5x coverage + specific sample's percent CpG methylation plot
+
+fileName$actualFileName2 <- paste(fileName$nameBase2, "-Filtered", "-5xCoverage-", fileName$fragment.ID, "_",fileName$treatment,".jpeg", sep = "") #Create a new column for the full filename for filtered + 5x coverage + specific sample's percent CpG coverage plot
+
+head(fileName) #Confirm column creation
+```
+### Create plots
+
+```{r}
+for(i in 1:nFiles) { #For each data file
+  jpeg(filename = fileName$actualFileName1[i], height = 1000, width = 1000) #Save file with designated name
+  methylKit::getMethylationStats(processedFilteredFilesCov5_outrm[[i]], plot = TRUE, both.strands = FALSE) #Get %CpG methylation information
+  dev.off() #Turn off plotting device
+} #Plot and save %CpG methylation information
+```
+
+```{r}
+for(i in 1:nFiles) { #For each data file
+  jpeg(filename = fileName$actualFileName2[i], height = 1000, width = 1000) #Save file with designated name
+  methylKit::getCoverageStats(processedFilteredFilesCov5_outrm[[i]], plot = TRUE, both.strands = FALSE) #Get CpG coverage information
+  dev.off() #Turn off plotting device
+} #Plot and save CpG coverage information
+```
+
+## Comparative analysis
+
+```{r}
+methylationInformationFilteredCov5 <- methylKit::unite(processedFilteredFilesCov5_outrm, 
+                                                       destrand = FALSE,
+                                                       mc.cores = 2) #Combine all processed files into a single table. Use destrand = FALSE to not destrand. By default only bases with data in all samples will be kept
+head(methylationInformationFilteredCov5) #Confirm unite
+```
+
+```{r}
+clusteringInformationFilteredCov5 <- methylKit::clusterSamples(methylationInformationFilteredCov5, dist = "correlation", method = "ward", plot = FALSE) #Save cluster information as a new object
+```
+
+```{r}
+jpeg(filename = "../output/05-methylKit/general-stats/Full-Sample-Pearson-Correlation-Plot-FilteredCov5Destrand.jpeg", height = 1000, width = 1000) #Save file with designated name
+methylKit::getCorrelation(methylationInformationFilteredCov5, plot = TRUE) #Understand correlation between methylation patterns in different samples
+dev.off()
+```
+
+```{r}
+jpeg(filename = "../output/05-methylKit/general-stats/Full-Sample-CpG-Methylation-Clustering-FilteredCov5Destrand.jpeg", height = 1000, width = 1000) #Save file with designated name
+methylKit::clusterSamples(methylationInformationFilteredCov5, dist = "correlation", method = "ward", plot = TRUE) #Cluster samples based on correlation coefficients
+dev.off()
+```
+
+```{r}
+jpeg(filename = "../output/05-methylKit/general-stats/Full-Sample-Methylation-PCA-FilteredCov5Destrand.jpeg", height = 1000, width = 1000) #Save file with designated name
+methylKit::PCASamples(methylationInformationFilteredCov5) #Run a PCA analysis on percent methylation for all samples
+dev.off() #Turn off plotting device
+```
+
+```{r}
+jpeg(filename = "../output/05-methylKit/general-stats/Full-Sample-Methylation-Screeplot-FilteredCov5Destrand.jpeg", height = 1000, width = 1000) #Save file with designated name
+methylKit::PCASamples(methylationInformationFilteredCov5, screeplot = TRUE) #Run the PCA analysis and plot variances against PC number in a screeplot
+dev.off()
+```
+
+
+# Differentially methylated loci
+
+## All samples
+
+### Identify DML
+
+```{r}
+differentialMethylationStatsTreatment_outrm <- methylKit::calculateDiffMeth(methylationInformationFilteredCov5, overdispersion = "MN", test = "Chisq", mc.cores = 8) #Calculate differential methylation statistics and include covariate information.
+head(differentialMethylationStatsTreatment_outrm) #Look at differential methylation output
+```
+
+```{r}
+library(ggplot2)
+
+# Assuming differentialMethylationStatsTreatment_outrm is your methylDiff object
+# Filter DMRs with q-value < 0.05
+significant_dmg <- getData(differentialMethylationStatsTreatment_outrm[differentialMethylationStatsTreatment_outrm$qvalue < 0.05, ])
+
+# Create a data frame for plotting
+plot_data <- data.frame(
+  chr = significant_dmg$chr,
+  start = significant_dmg$start,
+  meth.diff = significant_dmg$meth.diff
+)
+
+# Count the number of positive and negative methylation differences
+positive_count <- sum(significant_dmg$meth.diff > 0)
+negative_count <- sum(significant_dmg$meth.diff < 0)
+
+# Plot with counts added to the quadrants
+ggplot(plot_data, aes(x = start, y = meth.diff)) +
+  geom_point(alpha = 0.5) +  # Set alpha to reduce point transparency
+  theme_minimal() +
+  labs(title = "Significant Differentially Methylated Regions (q-value < 0.05)",
+       x = "Genomic Position (start)",
+       y = "Methylation Difference (%)") +
+  theme(legend.position = "none") +  # Remove the legend
+  # Add the count of positive and negative methylation differences as text annotations
+  annotate("text", x = Inf, y = Inf, label = paste("Positive:", positive_count), 
+           hjust = 1.1, vjust = 1.1, size = 4, color = "blue") +
+  annotate("text", x = Inf, y = -Inf, label = paste("Negative:", negative_count), 
+           hjust = 1.1, vjust = -0.1, size = 4, color = "red")
 
 ```
+
+
+```{r}
+diffMethStatsTreatment5 <- methylKit::getMethylDiff(differentialMethylationStatsTreatment_outrm, difference = 5, qvalue = 0.01) #Identify DML based on difference threshold
+
+length(diffMethStatsTreatment5$chr) #DML
+
+head(diffMethStatsTreatment5)
+```
+
+```{r}
+diffMethStatsTreatment50All <- methylKit::getMethylDiff(differentialMethylationStatsTreatment_outrm, difference = 50, qvalue = 0.01)
+length(diffMethStatsTreatment50All$chr) #1599 DML
+head(diffMethStatsTreatment50All)
+```
+
+```{r}
+diffMethStatsTreatment75All <- methylKit::getMethylDiff(differentialMethylationStatsTreatment_outrm, difference = 75, qvalue = 0.01)
+length(diffMethStatsTreatment75All$chr) #59 DML
+head(diffMethStatsTreatment75All)
+```
+
+```{r}
+write.csv(diffMethStatsTreatment25All, "DML/DML-pH-25-Cov5-All.csv")
+write.csv(diffMethStatsTreatment50All, "DML/DML-pH-50-Cov5-All.csv")
+write.csv(diffMethStatsTreatment75All, "DML/DML-pH-75-Cov5-All.csv")
+```
+
+
+
 
 ## Appendix
 
@@ -134,5 +323,6 @@ On Globus Connect in your browser (https://www.globus.org):
 - Select acda5457-9c06-4564-8375-260ba428f22a (exact address of Unity) in the collection field on the right
 - Select the files or folders you want to transfer from Andromeda to Unity and press ‘Start’.
   - navigating to `/data/putnamlab/dbecks/Becker_E5/WGBS_Becker_E5/Becker_WGBS/bismark_deduplicated/` in andromeda and `/project/pi_hputnam_uri_edu/WGBS_mech_model/` in unity
+  - navigating to `/data/putnamlab/dbecks/Becker_E5/WGBS_Becker_E5/Becker_WGBS/CovtoCyto/` in andromeda and `/project/pi_hputnam_uri_edu/mechanism_to_model/output/05-methylKit/merged_cpg/` in unity
   
 
