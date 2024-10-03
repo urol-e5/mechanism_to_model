@@ -81,9 +81,7 @@ write.csv(data_pc, "../data/01-Physiology/phys_data_pc_poc.csv")
 
 ### Acropora pulchra 
 
-Physiology data is from Danielle's 2022 experiment, which examined the physiological and molecular effects of a simulated marine heatwave on Acropora pulchra. Host biomass, host respiration, symbiont Pmax, and symbiont biomass were selected as physiological variables to make PC1 (proxy for energetic state). Because this was a heatwave experiment, higher values of PC1 represents a lower energetic state?
-
-The github for that project is [here](https://github.com/daniellembecker/A.pul_Heatwave/tree/master). 
+Physiology data is from Danielle's 2022 experiment, which examined the physiological and molecular effects of a simulated marine heatwave on Acropora pulchra. Host biomass, host respiration, symbiont Pmax, and symbiont biomass were selected as physiological variables to make PC1 (proxy for energetic state). Because this was a heatwave experiment, lower values of PC1 represents a lower energetic state. The github for that project is [here](https://github.com/daniellembecker/A.pul_Heatwave/tree/master). 
 
 Read in data and select only TP5 (last timepoint).
 ```{r}

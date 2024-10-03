@@ -17,7 +17,7 @@ library(reshape2)
 
 ### Pocillopora 
 
-This data is from [Becker et al. 2021](https://link.springer.com/article/10.1007/s00338-021-02138-2), which examined the effect of chronic low level nutrient enrichment on Pocillopora spp. 
+This data is from [Becker et al. 2021](https://link.springer.com/article/10.1007/s00338-021-02138-2), which examined the effect of chronic low level nutrient enrichment on Pocillopora spp. The github for that project is [here](https://github.com/daniellembecker/Chronic_low_nutrient_enrichment_benefits_coral_thermal_performance_fore_reef_habitat). 
 
 Read in gene count matrix. 
 ```{r}
@@ -152,6 +152,36 @@ ggplot(subset_count_phys_no_outliers, aes(x = PC1, y = value, color = query_id))
   theme(legend.position = "none")
 ```
 
+### Acropora pulchra 
+
+Data is from Danielle's 2022 experiment, which examined the physiological and molecular effects of a simulated marine heatwave on Acropora pulchra. The github for that project is [here](https://github.com/daniellembecker/A.pul_Heatwave/tree/master). 
+
+Read in gene count matrix. 
+```{r}
+###### gene counts matrix from apul genome 
+
+# Metadata for RNAseq - may not need 
+```
+
+Read in blast results for Pverr against epigenetic proteins of interest 
+```{r}
+blast_apul <- read.delim("../output/08-Apul-epimods-blast/Mach-tblastn-Apul_out.tab", sep = "", header = F)
+colnames(blast_apul) <- c("query_id", "subject_id", "percent_identity", "alignment_length", 
+                     "mismatches", "gap_openings", "q_start", "q_end", "s_start", 
+                     "s_end", "e_value", "bit_score")
+head(blast_apul)
+```
+
+
+May need to do some naming stuff 
+
+join with phys data 
+
+id outliers 
+
+run correlation
+
+Subset df by significant correlation and plot 
 
 
 
