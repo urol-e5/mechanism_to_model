@@ -412,3 +412,58 @@ Heatmap(z_score_matrix,
             # Reorder dendrogram based on clustering
          heatmap_legend_param = list(title = "Gene Count"))
 ```
+
+
+
+
+
+
+![](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_QuickGOTerm_GO0040029_2024-10-03_16-29-35.png)
+
+# Grabbing Epigenetic Regulators of Gene Expression
+
+GO:0040029  
+epigenetic regulation of gene expression
+
+
+```{bash}
+# Set the variable for the GO term
+GO_TERM="0040029"
+
+# Use the variable in the curl command
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A${GO_TERM}%29%29+AND+%28reviewed%3Atrue%29" -o "../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa"
+
+
+
+head ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa
+grep -c ">" ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa
+
+
+
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa \
+-dbtype prot \
+-out ../output/06-moreGO/SwissProt-GO:${GO_TERM}
+
+
+
+fasta="../data/Pver_proteins_names_v1.0.faa"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastp \
+-query $fasta \
+-db ../output/06-moreGO/SwissProt-GO:${GO_TERM} \
+-out ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab \
+-evalue 1E-05 \
+-num_threads 48 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6 \
+2>/dev/null
+
+head ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
+wc -l ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
+```
+
+
+
+
