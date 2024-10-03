@@ -15,7 +15,7 @@ library(tidyverse)
 
 ### Pocillopora 
 
-Physiology data is from [Becker et al. 2021](https://link.springer.com/article/10.1007/s00338-021-02138-2), which examined the effect of chronic low level nutrient enrichment on Pocillopora spp. Holobiont biomass, chlorophyll a, symbiont density, and Pmax were selected as physiological variables to make PC1. 
+Physiology data is from [Becker et al. 2021](https://link.springer.com/article/10.1007/s00338-021-02138-2), which examined the effect of chronic low level nutrient enrichment on Pocillopora spp. Holobiont biomass, chlorophyll a, symbiont density, and Pmax were selected as physiological variables to make PC1 (proxy for energetic state). Because this was a nutrient enrichment experiment, higher values of PC1 represents a higher energetic state. The github for that project is [here](https://github.com/daniellembecker/Chronic_low_nutrient_enrichment_benefits_coral_thermal_performance_fore_reef_habitat). 
 
 Read in data 
 ```{r}
@@ -54,7 +54,8 @@ pc2_var <- variance_explained[2] * 100
 
 # Extract PCA results for plotting
 pca_df <- as.data.frame(pca_result$x) %>%
-  bind_cols(data %>% select(treatment, fragment.ID))  # Add the treatment column
+  bind_cols(data %>% select(treatment, fragment.ID)) %>%  # Add the treatment column
+  mutate(PC1 = PC1*(-1))
 
 # Create PCA plot with percentages added to axis labels
 ggplot(pca_df, aes(x = PC1, y = PC2, color = treatment)) +
@@ -70,7 +71,7 @@ PC1 explains 65.2% of variance. Merge pca data back with all of the data and rem
 ```{r}
 data_pc <- data %>%
   full_join(pca_df, by = "fragment.ID") %>%
-  select(fragment.ID, treatment.x, AFDW.mg.cm2., chlA.ugcm2, surface.area, zoox.per.cm2, Topt, Pmax, PC1, PC2, PC3, PC4) %>%
+  select(fragment.ID, treatment.x, AFDW.mg.cm2., chlA.ugcm2, surface.area, zoox.per.cm2, Topt, Pmax, PC1) %>%
   rename(treatment = treatment.x)
 
 # Save as csv 
@@ -78,7 +79,83 @@ write.csv(data_pc, "../data/01-Physiology/phys_data_pc_poc.csv")
 ```
 
 
-### Acropora pulchra  
+### Acropora pulchra 
+
+Physiology data is from Danielle's 2022 experiment, which examined the physiological and molecular effects of a simulated marine heatwave on Acropora pulchra. Host biomass, host respiration, symbiont Pmax, and symbiont biomass were selected as physiological variables to make PC1 (proxy for energetic state). Because this was a heatwave experiment, higher values of PC1 represents a lower energetic state?
+
+The github for that project is [here](https://github.com/daniellembecker/A.pul_Heatwave/tree/master). 
+
+Read in data and select only TP5 (last timepoint).
+```{r}
+apul_phys <- read.csv("../data/01-Physiology/master_timeseries_apul.csv") %>%
+  filter(timepoint == "TP5") %>%
+  select(c(fragment_ID, Host_AFDW.mg.cm2, Sym_AFDW.mg.cm2, treatment, genotype))
+apul_resp <- read.csv("../data/01-Physiology/summary_respo_fragment_ID_apul.csv") %>%
+  filter(timepoint == "TP5") %>%
+  select(c(fragment_ID, Rd, P))
+```
+
+6 adult samples were sequenced from the last timepoint; only these individials will be used for making PC1. Read in extraction metadata 
+```{r}
+apul_meta <- read.csv("../data/01-Physiology/heatwave_CGA_extractions_metadata_apul.csv") %>%
+  filter(type == "adult")
+apul_meta$ID <- sub("_", "", apul_meta$ID)
+```
+
+Merge phys data with correct samples
+```{r}
+data_apul <- apul_phys %>%
+  full_join(apul_resp, by = "fragment_ID")
+data_apul <- data_apul %>%
+  left_join(apul_meta, by = c("fragment_ID" = "ID"))
+
+# Remove extra columns 
+data_apul <- data_apul[!is.na(data_apul$type), ]
+```
+
+Select data for PCA
+```{r}
+pca_data_apul <- data_apul %>%
+  select(Host_AFDW.mg.cm2, Sym_AFDW.mg.cm2, Rd, P)
+```
+
+Run PCA 
+```{r}
+# Perform PCA on the selected data
+pca_result_apul <- prcomp(pca_data_apul, scale. = TRUE)
+
+# Calculate the proportion of variance explained by each principal component
+variance_explained <- pca_result_apul$sdev^2 / sum(pca_result_apul$sdev^2)
+
+# Extract the percentage of variance for PC1 and PC2
+pc1_var <- variance_explained[1] * 100
+pc2_var <- variance_explained[2] * 100
+
+# Extract PCA results for plotting
+pca_df_apul <- as.data.frame(pca_result_apul$x) %>%
+  bind_cols(data_apul %>% select(fragment_ID, treatment.x)) %>% # Add the treatment column
+  mutate(PC1 = PC1*(-1))
+  
+# Create PCA plot with percentages added to axis labels
+ggplot(pca_df_apul, aes(x = PC1, y = PC2, color = treatment.x)) +
+  geom_point(size = 3) +
+  labs(
+    x = paste0("Principal Component 1 (", round(pc1_var, 2), "% variance)"),
+    y = paste0("Principal Component 2 (", round(pc2_var, 2), "% variance)")
+  ) +
+  theme_minimal()
+```
+
+PC1 explains 65.5% of variance. Merge pca data back with all of the data and remove unneeded columns 
+```{r}
+data_pc_apul <- data_apul %>%
+  full_join(pca_df_apul, by = "fragment_ID") %>%
+  select(fragment_ID, Host_AFDW.mg.cm2, Sym_AFDW.mg.cm2, treatment.x.x, Rd, P, PC1) %>%
+  rename(treatment = treatment.x.x)
+
+# Save as csv 
+write.csv(data_pc_apul, "../data/01-Physiology/phys_data_pc_apul.csv")
+```
 
 
 
