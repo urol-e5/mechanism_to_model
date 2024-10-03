@@ -11,10 +11,63 @@ I am identifying differentially methylated loci using methylkit based on [Yaamin
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = "~/Documents/URI/mechanism_to_model/output/methylKit/") #Set root directory
+knitr::opts_knit$set(root.dir = "/project/pi_hputnam_uri_edu/mechanism_to_model/output/05-methylKit/") #Set root directory
 ```
 
-# Install packages
+# Process bam files for methylkit, on unity
+
+to go to interactive mode in unity: `salloc -p cpu -c 8 --mem 32G`
+
+```{bash}
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --nodes=1 --ntasks-per-node=30
+#SBATCH --signal=2
+#SBATCH --no-requeue
+#SBATCH --mem=100GB
+#SBATCH --error="outs_errs/%x_error.%j"
+#SBATCH --output="outs_errs/%x_output.%j"
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL
+
+# load modules needed
+
+module load uri/main
+module load all/Bismark/0.23.1-foss-2021b
+module load SAMtools/1.18-GCC-12.3.0
+
+#Sort for Downstream Applications
+
+cd ../data/WGBS/
+
+mkdir ../../output/05-methylKit/bismark
+
+find *deduplicated.bam | \
+xargs basename -s .bam | \
+xargs -I{} samtools \
+sort --threads 28 {}.bam \
+-o ../../output/05-methylKit/bismark/{}.sorted.bam
+
+#Index for Downstream Applications
+
+cd ../../output/05-methylKit/bismark/
+
+find *.sorted.bam | \
+xargs basename -s .sorted.bam | \
+xargs -I{} samtools \
+index -@ 28 {}.sorted.bam
+
+# Generate Bismark HTML processing report
+bismark2report
+
+# Generate Bismark summary report
+bismark2summary
+```
+
+
+
+
+# Install packages to run methylkit
 
 ```{r}
 #Packages for running methylKit
@@ -51,6 +104,7 @@ sessionInfo()
 
 ```
 
+## Appendix
 
 Moving Danielle files to unity from Andromeda:
 
