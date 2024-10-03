@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+
+data/WGBS
+output/05-methylKit/bismark
+scripts/outs_errs
