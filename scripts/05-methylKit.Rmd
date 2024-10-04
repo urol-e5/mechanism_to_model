@@ -74,7 +74,7 @@ merged_data$treatment <- ifelse(merged_data$treatment == "enriched", 1,
                                  ifelse(merged_data$treatment == "control", 0, NA))
 
 # Display the updated merged_data
-print(merged_data)
+head(merged_data)
 ```
 
 I'll use `methRead` to create a methylation object from the coverage files, and include sample ID and treatment information.
@@ -85,7 +85,7 @@ processedFiles <- methylKit::methRead(analysisFiles,
                                       assembly = "Pver",
                                       treatment = merged_data$treatment,
                                       pipeline = "bismarkCoverage",
-                                      mincov = 2) #Process files. Treatment specified based on ploidy status. Use mincov = 2 to quickly process reads.
+                                      mincov = 2) #Process files. Use mincov = 2 to quickly process reads.
 
 ### Save the MethylKit object; re-doing the previous step is memory/time intensive, so best to use the saved object moving forward. 
 
@@ -94,13 +94,14 @@ save(processedFiles, file = "../output/05-methylKit/processedFiles.RData")
 
 
 ```{r}
-processedFiles <- load("../output/05-methylKit/processedFiles.RData")
+load("../output/05-methylKit/processedFiles.RData")
 
 processedFilteredFilesCov5 <- methylKit::filterByCoverage(processedFiles,
                                                           lo.count = 5, lo.perc = NULL,
                                                           high.count = NULL, high.perc = 99.9) %>%
   methylKit::normalizeCoverage(.)
 
+rm(processedFiles)
 #Filter coverage information for minimum 5x coverage, and remove PCR duplicates by excluding data in the 99.9th percentile of coverage with hi.perc = 99.9. Normalize coverage between samples to avoid over-sampling reads from one sample during statistical testing
 ```
 
@@ -142,7 +143,7 @@ PCASamples(meth_filter_rmout)
 
 ### Specify working directory for output
 
-```{bash}
+```{bash, eval=FALSE}
 mkdir ../output/05-methylKit/general-stats
 ```
 
@@ -273,25 +274,11 @@ length(diffMethStatsTreatment5$chr) #DML
 head(diffMethStatsTreatment5)
 ```
 
-```{r}
-diffMethStatsTreatment50All <- methylKit::getMethylDiff(differentialMethylationStatsTreatment_outrm, difference = 50, qvalue = 0.01)
-length(diffMethStatsTreatment50All$chr) #1599 DML
-head(diffMethStatsTreatment50All)
-```
-
-```{r}
-diffMethStatsTreatment75All <- methylKit::getMethylDiff(differentialMethylationStatsTreatment_outrm, difference = 75, qvalue = 0.01)
-length(diffMethStatsTreatment75All$chr) #59 DML
-head(diffMethStatsTreatment75All)
-```
-
-```{r}
+```{r, eval=FALSE}
 write.csv(diffMethStatsTreatment25All, "DML/DML-pH-25-Cov5-All.csv")
 write.csv(diffMethStatsTreatment50All, "DML/DML-pH-50-Cov5-All.csv")
 write.csv(diffMethStatsTreatment75All, "DML/DML-pH-75-Cov5-All.csv")
 ```
-
-
 
 
 ## Appendix
@@ -302,7 +289,7 @@ https://daniellembecker.github.io/DanielleBecker_Lab_Notebook/Data-Transfer-Andr
 
 in Andromeda:
 
-```{bash}
+```{bash, eval=FALSE}
 interactive
 module load GlobusConnectPersonal/3.2.0
 #follow the login link, enter auth code, enter "~/data/putnamlab/" as endpoint
@@ -313,7 +300,7 @@ nano ~/.globusonline/lta/config-paths
 /data/putnamlab/,0,1 # Read-write access to the putnamlab directory
 ```
 
-```{bash}
+```{bash, eval=FALSE}
 globusconnectpersonal -start &
 ```
 
