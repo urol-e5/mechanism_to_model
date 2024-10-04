@@ -50,12 +50,12 @@ sessionInfo()
 # load in files from bismark
 
 ```{r}
-analysisFiles <- as.list(list.files("/project/pi_hputnam_uri_edu/mechanism_to_model/output/05-methylKit/merged_cpg", full.names=T)) #Put all .cov files into a list for analysis.
+analysisFiles <- as.list(list.files("../output/05-methylKit/merged_cpg", full.names=T)) #Put all .cov files into a list for analysis.
 
-analysisFiles
+head(analysisFiles)
 ```
 
-```{r, eval = FALSE}
+```{r}
 metadata_WGBS <- read_csv("../data/metadata.WGBS.csv")
 
 # Extract numbers from bam_list filenames
@@ -79,22 +79,23 @@ print(merged_data)
 
 I'll use `methRead` to create a methylation object from the coverage files, and include sample ID and treatment information.
 
-```{r}
+```{r, eval = FALSE}
 processedFiles <- methylKit::methRead(analysisFiles,
                                       sample.id = as.list(file_numbers),
                                       assembly = "Pver",
                                       treatment = merged_data$treatment,
                                       pipeline = "bismarkCoverage",
                                       mincov = 2) #Process files. Treatment specified based on ploidy status. Use mincov = 2 to quickly process reads.
-```
 
 ### Save the MethylKit object; re-doing the previous step is memory/time intensive, so best to use the saved object moving forward. 
 
-```{r, eval = FALSE}
-save(processedFiles, file = "../output/05-methylKit/processedFiles") 
+save(processedFiles, file = "../output/05-methylKit/processedFiles.RData") 
 ```
 
+
 ```{r}
+processedFiles <- load("../output/05-methylKit/processedFiles.RData")
+
 processedFilteredFilesCov5 <- methylKit::filterByCoverage(processedFiles,
                                                           lo.count = 5, lo.perc = NULL,
                                                           high.count = NULL, high.perc = 99.9) %>%
