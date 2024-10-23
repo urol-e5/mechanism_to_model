@@ -156,6 +156,10 @@ ggplot(subset_count_phys_no_outliers, aes(x = PC1, y = value, color = query_id))
 
 Data is from Danielle's 2022 experiment, which examined the physiological and molecular effects of a simulated marine heatwave on Acropora pulchra. The github for that project is [here](https://github.com/daniellembecker/A.pul_Heatwave/tree/master). 
 
+#### Epigenetic proteins of interest 
+
+Epigenetic proteins of interest obtained from curated list of human and mouse epigenetic protein sequences. 
+
 Read in gene count matrix. 
 ```{r}
 # Count matrix from genome 
@@ -164,12 +168,9 @@ count_matrix <- read.csv("../data/RNAseq/Apul_gene_count_matrix.csv")
 # Rename columns 
 colnames(count_matrix)[-1] <- gsub("^X", "ACR", colnames(count_matrix)[-1])  # Replace 'X' with 'ACR'
 colnames(count_matrix)[-1] <- gsub("_sorted\\.bam\\.gtf", "", colnames(count_matrix)[-1])  # Remove '_sorted.bam.gtf'
-
-
-# RNA meta 
 ```
 
-Read in blast results for Pverr against epigenetic proteins of interest 
+Read in blast results for Apul against epigenetic proteins of interest 
 ```{r}
 blast_apul <- read.delim("../output/08-Apul-epimods-blast/Mach-tblastn-Apul_out.tab", sep = "", header = F)
 colnames(blast_apul) <- c("query_id", "subject_id", "percent_identity", "alignment_length", 
@@ -179,9 +180,7 @@ head(blast_apul)
 
 # Create a new column to extract the desired part of subject_id - needed to merge with gff 
 blast_apul <- blast_apul %>%
-  mutate(
-    subject_id_extracted = str_extract(subject_id, "mRNA::ptg\\d+l:\\d{4}")  # Extract the required format
-  )
+  mutate(subject_id_extracted = str_extract(subject_id, "mRNA::(?:ptg\\d+l|ntLink_\\d+):\\d{4}"))
 ```
 
 The subject IDs for blast are from the gff and are just using the mRNA, scaffold, and location of feature. GFF needs to be parsed to match the blast names with the gff. 
@@ -312,4 +311,159 @@ ggplot(subset_count_phys_no_outliers_apul, aes(x = PC1, y = value, color = query
   theme(legend.position = "none")
 ```
 
+#### GO:0040029
+
+Read in gene count matrix. 
+```{r}
+# Count matrix from genome 
+count_matrix <- read.csv("../data/RNAseq/Apul_gene_count_matrix.csv")
+
+# Rename columns 
+colnames(count_matrix)[-1] <- gsub("^X", "ACR", colnames(count_matrix)[-1])  # Replace 'X' with 'ACR'
+colnames(count_matrix)[-1] <- gsub("_sorted\\.bam\\.gtf", "", colnames(count_matrix)[-1])  # Remove '_sorted.bam.gtf'
+```
+
+Read in blast results for Apul against epigenetic proteins of interest 
+```{r}
+blast_apul <- read.delim("../output/08-Apul-epimods-blast/Apul_blastx-GO_0040029_out.tab", sep = "", header = F)
+colnames(blast_apul) <- c("query_id", "subject_id", "percent_identity", "alignment_length", 
+                     "mismatches", "gap_openings", "q_start", "q_end", "s_start", 
+                     "s_end", "e_value", "bit_score")
+head(blast_apul)
+
+# Create a new column to extract the desired part of subject_id - needed to merge with gff 
+blast_apul <- blast_apul %>%
+  mutate(query_id_extracted = str_extract(query_id, "mRNA::(?:ptg\\d+l|ntLink_\\d+):\\d{4}"))
+```
+
+Read in gff
+```{r}
+gff_apul <- read.csv("../data/RNAseq/Acropora_pulchra.gff3", sep = "", header = F, skip = 1) %>%
+  select(!V10)
+colnames(gff_apul) <- c("scaffold", "source", "type", "start", "end", "score", "strand", "phase", "attr")
+```
+
+Make a column in the gff that matches the subject_id column in the blast df
+```{r}
+# Select only mRNA
+gff_apul_mRNA <- gff_apul %>%
+  filter(type == "mRNA")
+
+# Create column to match subject_id in blast df; pull out gene name information
+gff_apul_mRNA <- gff_apul_mRNA %>%
+  mutate(query_id_extracted = paste0("mRNA::", scaffold, ":", substr(start, 1, 4))) %>%  # Use only the first four digits of start
+  mutate(Parent = str_extract(attr, "(?<=Parent=)[^;]+"))  # Extract Parent value
+```
+
+Join gff and blast df 
+```{r}
+blast_apul_names <- blast_apul %>%
+  left_join(gff_apul_mRNA, by = "query_id_extracted") %>%
+  na.omit()
+
+# Extract the end value from subject_id (after the "-")
+blast_apul_names <- blast_apul_names %>%
+  mutate(query_id_end = as.numeric(str_extract(query_id, "(?<=-)[0-9]+")))  # Extract the number after "-"
+
+# Keep rows where subject_id_end matches the end column
+blast_apul_names <- blast_apul_names %>%
+  filter(query_id_end == end)
+```
+
+Merge blast info with count matrix 
+```{r}
+count_blast <- blast_apul_names %>%
+  full_join(count_matrix, by = c("Parent" = "gene_id")) %>%
+  na.omit()
+```
+
+Manipulate data so that there is a sample column
+```{r}
+reshaped_data_apul <- count_blast %>%
+  # Pivot longer to stack values
+  pivot_longer(cols = ACR12:ACR8, 
+               names_to = "sample", 
+               values_to = "value")
+```
+
+Read in phys PC data
+```{r}
+phys_pc_apul <- read.csv("../data/01-Physiology/phys_data_pc_apul.csv") %>%
+  mutate(fragment_ID = gsub("_5", "", fragment_ID))
+```
+
+Join phys data with reshaped data df 
+```{r}
+count_phys_apul <- phys_pc_apul %>%
+  full_join(reshaped_data_apul, by = c("fragment_ID" = "sample")) %>%
+  na.omit()
+
+count_phys_apul$value <- as.numeric(count_phys_apul$value)
+```
+
+ID outliers 
+```{r}
+identify_outliers <- function(x) {
+  Q1 <- quantile(x, 0.25)
+  Q3 <- quantile(x, 0.75)
+  IQR <- Q3 - Q1
+  lower_bound <- Q1 - 1.5 * IQR
+  upper_bound <- Q3 + 1.5 * IQR
+  return(x < lower_bound | x > upper_bound)
+}
+
+# Flag and sum outliers by group
+count_phys_outliers_apul <- count_phys_apul %>%
+  group_by(query_id) %>%
+  mutate(is_outlier = identify_outliers(value)) #%>%
+  #summarise(total_outliers = sum(is_outlier))
+
+# Remove outliers 
+count_phys_no_outliers_apul <- count_phys_outliers_apul %>%
+  filter(is_outlier == FALSE)
+```
+
+Run correlation
+```{r}
+correlation_results_no_outliers_apul <- count_phys_no_outliers_apul %>%
+  group_by(subject_id) %>%
+  summarize(
+    correlation = list(cor.test(PC1, value))) %>%
+  mutate(
+    estimate = map_dbl(correlation, ~ .$estimate),
+    p.value = map_dbl(correlation, ~ .$p.value)
+  ) %>%
+  select(subject_id, estimate, p.value) %>%
+  filter(p.value <= 0.05) %>%
+  arrange(desc(estimate)) %>%
+  #filter(estimate > 0) %>%
+  mutate(subject_id = factor(subject_id, levels = subject_id[order(estimate)]))
+
+write.csv(correlation_results_no_outliers_apul, "../output/03-EpigeneticProteins-Phys-Correlation/GO:0040029_correlation_apul.csv")
+```
+
+Subset df by significant correlation and plot 
+```{r}
+sig_prot_apul <- correlation_results_no_outliers_apul$subject_id
+
+# Subset by significant correlations 
+subset_count_phys_no_outliers_apul <- count_phys_no_outliers_apul %>%
+  filter(subject_id %in% sig_prot_apul) %>%
+  full_join(correlation_results_no_outliers_apul, by = "subject_id")
+
+# Remove any duplicate rows 
+subset_count_phys_no_outliers_apul <- unique(subset_count_phys_no_outliers_apul)
+
+ggplot(subset_count_phys_no_outliers_apul, aes(x = PC1, y = value, color = treatment)) + 
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "solid", color = "black") +
+  geom_text(data = subset_count_phys_no_outliers_apul[!duplicated(subset_count_phys_no_outliers_apul$subject_id), ], 
+            aes(label = paste("Estimate:", round(estimate, 2))), 
+            x = Inf, y = Inf, hjust = 1.1, vjust = 1.5, size = 3, inherit.aes = FALSE) +
+  #scale_color_manual(values = c("Significant" = "red", "Not Significant" = "black")) +
+  facet_wrap(~subject_id, scales = "free") +
+  theme(legend.position = "right")
+```
+
+If there are more than 6 points in a plot, it means that more than 1 Apul gene was identified as a match for the reference genes. 
 
